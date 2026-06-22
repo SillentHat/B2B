@@ -3,987 +3,1473 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart IT · Enterprise</title>
+<title>Smart IT · Universal Client B2B Enterprise</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+/* ── GitHub-Dark Design System ── */
 :root {
-  --bg0: #06080c;
-  --bg1: #0b0f17;
-  --bg2: #101520;
-  --bg3: #151c28;
-  --b0:  rgba(255,255,255,0.04);
-  --b1:  rgba(255,255,255,0.08);
-  --b2:  rgba(255,255,255,0.13);
-  --txt: #dce8f5;
-  --txt2:#7a94b0;
-  --txt3:#3a5068;
-  --c:   #00b4d8;    /* cyan */
-  --g:   #00c896;    /* green */
-  --r:   #ff4060;    /* red */
-  --a:   #f0a500;    /* amber */
-  --p:   #8b5cf6;    /* purple */
-  --bl:  #4080ff;    /* blue */
-  --mono:'JetBrains Mono',monospace;
+  --gh-canvas:     #0d1117;
+  --gh-surface:    #161b22;
+  --gh-overlay:    #21262d;
+  --gh-border:     #30363d;
+  --gh-border-dim: #21262d;
+  --gh-text:       #e6edf3;
+  --gh-muted:      #8b949e;
+  --gh-subtle:     #6e7681;
+  --accent:        #238636;
+  --accent-hover:  #2ea043;
+  --accent-glow:   rgba(35,134,54,.25);
+  --red:           #da3633;
+  --red-dim:       rgba(218,54,51,.15);
+  --yellow:        #d29922;
+  --blue:          #388bfd;
+  --purple:        #8957e5;
+  --teal:          #3fb950;
+  --orange:        #f0883e;
+  --font-mono:     'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
 }
+
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;background:var(--bg0)}
-body{font-family:'Inter',sans-serif;font-size:13px;color:var(--txt);display:flex;flex-direction:column}
+html,body{height:100%;overflow:hidden}
+body{background:var(--gh-canvas);color:var(--gh-text);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  font-size:14px;line-height:1.5;display:flex;flex-direction:column}
 
-/* ── BACKGROUND ── */
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse 900px 600px at 15% 20%, rgba(0,80,160,0.09) 0%,transparent 70%),
-    radial-gradient(ellipse 700px 800px at 85% 80%, rgba(0,50,120,0.07) 0%,transparent 70%);
-}
+/* ─── HEADER ─── */
+.gh-header{
+  height:48px;background:var(--gh-surface);
+  border-bottom:1px solid var(--gh-border);
+  display:flex;align-items:center;padding:0 16px;gap:16px;
+  position:sticky;top:0;z-index:200;flex-shrink:0}
 
-/* grid lines */
-body::after{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:
-    linear-gradient(rgba(0,180,216,0.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,180,216,0.025) 1px,transparent 1px);
-  background-size:60px 60px;
-}
+.gh-logo{display:flex;align-items:center;gap:8px;font-weight:700;
+  font-size:15px;letter-spacing:.5px;color:var(--gh-text);text-decoration:none}
+.gh-logo svg{fill:var(--gh-text);width:24px;height:24px}
+.gh-logo .brand-b2b{color:var(--accent);font-size:11px;
+  border:1px solid var(--accent);border-radius:12px;
+  padding:1px 7px;font-weight:600;margin-left:2px}
 
-/* ── SHELL ── */
-.shell{position:relative;z-index:1;display:flex;flex-direction:column;height:100vh}
+.gh-nav{display:flex;gap:2px;align-items:center;height:100%;margin-left:16px}
+.gh-nav-item{
+  color:var(--gh-muted);font-size:13px;font-weight:500;
+  padding:4px 10px;border-radius:6px;cursor:pointer;
+  display:flex;align-items:center;gap:6px;transition:all .15s;
+  border:1px solid transparent;position:relative}
+.gh-nav-item:hover{color:var(--gh-text);background:var(--gh-overlay)}
+.gh-nav-item.active{color:var(--gh-text);background:var(--gh-overlay);
+  border-color:var(--gh-border)}
+.gh-nav-item .badge{
+  background:var(--gh-overlay);border:1px solid var(--gh-border);
+  border-radius:20px;padding:0 6px;font-size:11px;
+  font-family:var(--font-mono);min-width:20px;text-align:center}
 
-/* ── HEADER ── */
-header{
-  height:48px;flex-shrink:0;
-  display:flex;align-items:center;padding:0 18px;gap:12px;
-  background:rgba(6,8,12,0.85);
-  border-bottom:1px solid var(--b1);
-  backdrop-filter:blur(24px);
-}
-.logo{display:flex;align-items:center;gap:9px;text-decoration:none;flex-shrink:0}
-.logo-mark{
-  width:30px;height:30px;border-radius:6px;
-  background:linear-gradient(135deg,#001830,#002e58);
-  border:1px solid rgba(0,180,216,0.4);
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 14px rgba(0,180,216,0.12);
-}
-.logo-mark i{font-size:13px;color:var(--c)}
-.logo-name{font-size:14px;font-weight:700;letter-spacing:.5px;color:var(--txt)}
-.logo-tier{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--c);opacity:.7}
+.nav-dropdown{position:relative}
+.nav-dropdown-menu{
+  display:none;position:absolute;top:calc(100% + 8px);left:0;
+  background:var(--gh-surface);border:1px solid var(--gh-border);
+  border-radius:8px;min-width:200px;z-index:300;overflow:hidden;
+  box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.nav-dropdown:hover .nav-dropdown-menu{display:block}
+.nav-dropdown-item{
+  display:flex;align-items:center;gap:8px;padding:10px 14px;
+  color:var(--gh-muted);font-size:13px;cursor:pointer;
+  transition:background .1s}
+.nav-dropdown-item:hover{background:var(--gh-overlay);color:var(--gh-text)}
+.nav-dropdown-item i{width:14px;color:var(--gh-subtle)}
 
-/* status pills */
-.sys-pills{display:flex;gap:4px;margin-left:6px}
-.pill{
-  font-size:9px;font-weight:600;font-family:var(--mono);
-  padding:2px 7px;border-radius:20px;letter-spacing:.5px;
-  display:flex;align-items:center;gap:4px;
-  border:1px solid transparent;
-}
-.pill .dot{width:5px;height:5px;border-radius:50%}
-.pill.ok  {color:var(--g);border-color:rgba(0,200,150,.2);background:rgba(0,200,150,.05)}
-.pill.ok .dot{background:var(--g);box-shadow:0 0 4px var(--g);animation:blink 2s infinite}
-.pill.warn{color:var(--a);border-color:rgba(240,165,.15);background:rgba(240,165,0,.05)}
-.pill.warn .dot{background:var(--a)}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.gh-header-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.status-dot{
+  display:flex;align-items:center;gap:6px;font-size:12px;
+  color:var(--teal);background:rgba(63,185,80,.08);
+  border:1px solid rgba(63,185,80,.25);border-radius:20px;padding:3px 10px}
+.status-dot::before{content:'';width:7px;height:7px;border-radius:50%;
+  background:var(--teal);box-shadow:0 0 6px var(--teal);
+  animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.4}}
 
-/* nav */
-nav{display:flex;gap:1px;margin-left:6px}
-.ni{
-  display:flex;align-items:center;gap:5px;
-  padding:5px 10px;border-radius:6px;
-  font-size:12px;font-weight:500;color:var(--txt2);
-  cursor:pointer;border:1px solid transparent;transition:all .12s;
-  white-space:nowrap;position:relative;
-}
-.ni:hover{color:var(--txt);background:var(--b0)}
-.ni.active{color:var(--c);background:rgba(0,180,216,.07);border-color:rgba(0,180,216,.2)}
-.ni i{font-size:11px}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--gh-overlay);
+  border:1px solid var(--gh-border);display:flex;align-items:center;
+  justify-content:center;font-size:13px;font-weight:600;cursor:pointer;
+  color:var(--gh-text);transition:border-color .15s}
+.avatar:hover{border-color:var(--accent)}
 
-.dd{position:relative}
-.dd-menu{
-  display:none;position:absolute;top:calc(100% + 6px);left:0;
-  background:var(--bg3);border:1px solid var(--b1);
-  border-radius:8px;min-width:180px;z-index:999;overflow:hidden;
-  box-shadow:0 20px 60px rgba(0,0,0,.6);
-}
-.dd:hover .dd-menu{display:block}
-.dd-item{
-  display:flex;align-items:center;gap:9px;padding:9px 14px;
-  color:var(--txt2);font-size:12px;cursor:pointer;transition:background .1s;
-}
-.dd-item:hover{background:var(--b0);color:var(--txt)}
-.dd-item i{width:13px;font-size:11px;color:var(--txt3)}
+/* ─── LAYOUT ─── */
+.app-body{display:flex;flex:1;overflow:hidden}
 
-/* header right */
-.hr{margin-left:auto;display:flex;align-items:center;gap:8px}
-.clock{font-family:var(--mono);font-size:11px;color:var(--txt2);text-align:right;line-height:1.3}
-.clock .t{font-size:13px;font-weight:600;color:var(--c)}
-.icon-btn{
-  width:30px;height:30px;border-radius:6px;background:var(--b0);border:1px solid var(--b1);
-  display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--txt2);
-  transition:all .12s;position:relative;
-}
-.icon-btn:hover{border-color:var(--b2);color:var(--txt)}
-.ndot{position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--r);border:1px solid var(--bg0);box-shadow:0 0 5px var(--r)}
-
-.admin{
-  display:flex;align-items:center;gap:8px;padding:4px 4px 4px 10px;
-  background:var(--b0);border:1px solid var(--b1);border-radius:20px;cursor:pointer;
-  transition:border-color .12s;
-}
-.admin:hover{border-color:var(--b2)}
-.admin-text{text-align:right;line-height:1.2}
-.admin-name{font-size:12px;font-weight:600;color:var(--txt)}
-.admin-role{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--c)}
-.admin-av{
-  width:28px;height:28px;border-radius:50%;
-  background:linear-gradient(135deg,#001828,#003060);
-  border:1.5px solid var(--c);
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;font-weight:800;color:var(--c);
-  box-shadow:0 0 10px rgba(0,180,216,.25);position:relative;
-}
-.admin-av::after{
-  content:'';position:absolute;bottom:-1px;right:-1px;
-  width:8px;height:8px;border-radius:50%;
-  background:var(--g);border:1.5px solid var(--bg0);box-shadow:0 0 5px var(--g);
-}
-
-/* ── BODY ── */
-.body{display:flex;flex:1;overflow:hidden}
-
-/* ── SIDEBAR ── */
-aside{
-  width:210px;flex-shrink:0;
-  background:rgba(6,8,12,.7);border-right:1px solid var(--b1);
-  display:flex;flex-direction:column;overflow-y:auto;padding:12px 8px;
-  backdrop-filter:blur(20px);
-}
-aside::-webkit-scrollbar{width:0}
-.sec{margin-bottom:20px}
-.sec-label{
-  font-size:9px;font-weight:700;color:var(--txt3);
-  text-transform:uppercase;letter-spacing:1.2px;
-  padding:0 8px;margin-bottom:5px;
-}
-.si{
+.sidebar{
+  width:220px;flex-shrink:0;background:var(--gh-canvas);
+  border-right:1px solid var(--gh-border);
+  display:flex;flex-direction:column;overflow-y:auto;padding:12px 8px}
+.sidebar-section{margin-bottom:24px}
+.sidebar-label{
+  font-size:11px;font-weight:600;color:var(--gh-subtle);
+  text-transform:uppercase;letter-spacing:.8px;padding:0 8px;margin-bottom:6px}
+.sidebar-item{
   display:flex;align-items:center;gap:8px;padding:7px 8px;
-  border-radius:5px;cursor:pointer;color:var(--txt2);
-  font-size:12px;font-weight:500;transition:all .12s;
-  margin-bottom:1px;position:relative;
-}
-.si:hover{color:var(--txt);background:var(--b0)}
-.si.active{color:var(--c);background:rgba(0,180,216,.07)}
-.si.active::before{
-  content:'';position:absolute;left:0;top:5px;bottom:5px;
-  width:2px;background:var(--c);border-radius:0 2px 2px 0;
-  box-shadow:0 0 6px var(--c);
-}
-.si i{width:14px;text-align:center;font-size:11px;opacity:.8}
-.si.active i{opacity:1}
-.sc{
-  margin-left:auto;font-family:var(--mono);font-size:9px;
-  padding:1px 5px;border-radius:10px;
-}
-.sc.r{background:rgba(255,64,96,.1);color:var(--r);border:1px solid rgba(255,64,96,.2)}
-.sc.g{background:rgba(0,200,150,.1);color:var(--g);border:1px solid rgba(0,200,150,.2)}
-.sc.b{background:rgba(64,128,255,.1);color:var(--bl);border:1px solid rgba(64,128,255,.2)}
+  border-radius:6px;cursor:pointer;color:var(--gh-muted);
+  font-size:13px;transition:all .15s;position:relative}
+.sidebar-item:hover{color:var(--gh-text);background:var(--gh-overlay)}
+.sidebar-item.active{color:var(--gh-text);background:var(--gh-overlay);
+  font-weight:600}
+.sidebar-item.active::before{
+  content:'';position:absolute;left:-8px;top:50%;transform:translateY(-50%);
+  width:3px;height:18px;background:var(--accent);border-radius:0 3px 3px 0}
+.sidebar-item i{width:16px;text-align:center;font-size:13px}
+.sidebar-count{
+  margin-left:auto;background:var(--red-dim);color:var(--red);
+  border:1px solid rgba(218,54,51,.3);border-radius:12px;
+  padding:0 6px;font-size:11px;font-family:var(--font-mono)}
+.sidebar-count.ok{background:rgba(63,185,80,.08);color:var(--teal);
+  border-color:rgba(63,185,80,.25)}
 
-.acc-card{
-  margin-top:auto;
-  background:var(--b0);border:1px solid var(--b1);border-radius:7px;padding:12px;
-  position:relative;overflow:hidden;
-}
-.acc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--c),var(--bl))}
-.acc-name{font-size:12px;font-weight:700;margin-bottom:2px}
-.acc-sub{font-size:10px;color:var(--txt2);margin-bottom:7px}
-.acc-badge{
-  display:inline-flex;align-items:center;gap:4px;
-  font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
-  color:var(--c);background:rgba(0,180,216,.07);
-  border:1px solid rgba(0,180,216,.2);border-radius:10px;padding:2px 7px;
-}
+.sidebar-company{
+  background:var(--gh-overlay);border:1px solid var(--gh-border);
+  border-radius:8px;padding:12px;margin-top:auto}
+.company-name{font-weight:600;font-size:13px;color:var(--gh-text)}
+.company-sub{font-size:11px;color:var(--gh-muted);margin-top:2px}
+.company-badge{
+  display:inline-block;margin-top:6px;background:rgba(56,139,253,.1);
+  color:var(--blue);border:1px solid rgba(56,139,253,.25);
+  border-radius:12px;padding:1px 8px;font-size:11px}
 
-/* ── MAIN ── */
-main{flex:1;overflow-y:auto;background:transparent}
-main::-webkit-scrollbar{width:4px}
-main::-webkit-scrollbar-thumb{background:var(--b1);border-radius:2px}
+/* ─── MAIN CONTENT ─── */
+.main{flex:1;overflow-y:auto;background:var(--gh-canvas)}
+.page{display:none;padding:24px}
+.page.active{display:block;animation:fadein .2s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-.page{display:none;padding:20px;animation:fi .18s ease}
-.page.active{display:block}
-@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
-
-/* ── PAGE HEADER ── */
-.ph{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--b1)}
-.ph-left .eyebrow{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin-bottom:3px}
-.ph-left .title{font-size:17px;font-weight:700;color:var(--txt);display:flex;align-items:center;gap:8px}
-.ph-left .title i{font-size:15px;color:var(--c)}
-.ph-right{display:flex;gap:7px}
-
-/* ── BUTTONS ── */
-.btn{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:6px 12px;border-radius:5px;font-size:11px;font-weight:600;
-  cursor:pointer;border:1px solid;transition:all .12s;letter-spacing:.2px;
-}
-.btn-p{background:rgba(0,180,216,.12);border-color:rgba(0,180,216,.4);color:var(--c)}
-.btn-p:hover{background:rgba(0,180,216,.2);border-color:var(--c)}
-.btn-s{background:var(--b0);border-color:var(--b1);color:var(--txt2)}
-.btn-s:hover{border-color:var(--b2);color:var(--txt)}
-.btn-d{background:rgba(255,64,96,.08);border-color:rgba(255,64,96,.3);color:var(--r)}
-.btn-d:hover{background:rgba(255,64,96,.15)}
-
-.tog{display:flex;background:var(--b0);border:1px solid var(--b1);border-radius:5px;overflow:hidden}
-.tb{padding:5px 10px;font-size:10px;font-weight:600;cursor:pointer;color:var(--txt2);background:none;border:none;transition:all .12s}
-.tb.active{background:var(--b1);color:var(--c)}
-
-/* ── CARD ── */
-.card{
-  background:rgba(11,15,23,.8);border:1px solid var(--b1);
-  border-radius:8px;overflow:hidden;margin-bottom:14px;
-  backdrop-filter:blur(10px);
-}
-.card:hover{border-color:var(--b2)}
-.ch{
-  padding:10px 14px;border-bottom:1px solid var(--b1);
-  background:rgba(6,8,12,.4);
+/* ─── PAGE HEADER ─── */
+.page-header{
   display:flex;align-items:center;justify-content:space-between;
-}
-.ch-title{
-  font-size:11px;font-weight:700;color:var(--txt);
+  margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--gh-border)}
+.page-title{font-size:20px;font-weight:600;color:var(--gh-text);
+  display:flex;align-items:center;gap:10px}
+.page-title i{color:var(--gh-muted);font-size:18px}
+.page-actions{display:flex;gap:8px}
+
+/* ─── BUTTONS ─── */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 14px;border-radius:6px;font-size:13px;
+  font-weight:500;cursor:pointer;border:1px solid;transition:all .15s}
+.btn-primary{
+  background:var(--accent);border-color:var(--accent-hover);
+  color:#fff}
+.btn-primary:hover{background:var(--accent-hover)}
+.btn-secondary{
+  background:var(--gh-overlay);border-color:var(--gh-border);
+  color:var(--gh-text)}
+.btn-secondary:hover{background:var(--gh-border);border-color:var(--gh-muted)}
+.btn-danger{
+  background:var(--red-dim);border-color:rgba(218,54,51,.4);
+  color:var(--red)}
+.btn-danger:hover{background:rgba(218,54,51,.25)}
+
+/* ─── TOGGLE ─── */
+.toggle-group{
+  display:flex;background:var(--gh-overlay);
+  border:1px solid var(--gh-border);border-radius:6px;overflow:hidden}
+.toggle-btn{
+  padding:4px 12px;font-size:12px;cursor:pointer;
+  color:var(--gh-muted);border:none;background:none;transition:all .15s}
+.toggle-btn.active{background:var(--gh-border);color:var(--gh-text);font-weight:600}
+
+/* ─── CARDS ─── */
+.card{
+  background:var(--gh-surface);border:1px solid var(--gh-border);
+  border-radius:8px;overflow:hidden;margin-bottom:16px}
+.card-header{
+  padding:14px 16px;border-bottom:1px solid var(--gh-border);
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--gh-canvas)}
+.card-header-title{font-size:14px;font-weight:600;color:var(--gh-text);
+  display:flex;align-items:center;gap:8px}
+.card-header-title i{color:var(--gh-muted)}
+.card-body{padding:16px}
+
+/* ─── STAT PILLS ─── */
+.stat-row{display:flex;gap:0;border-bottom:1px solid var(--gh-border);
+  background:var(--gh-canvas)}
+.stat-pill{
+  flex:1;padding:14px 16px;border-right:1px solid var(--gh-border);
+  display:flex;flex-direction:column;gap:4px}
+.stat-pill:last-child{border-right:none}
+.stat-val{font-size:22px;font-weight:700;font-family:var(--font-mono)}
+.stat-val.green{color:var(--teal)}
+.stat-val.red{color:var(--red)}
+.stat-val.yellow{color:var(--yellow)}
+.stat-val.blue{color:var(--blue)}
+.stat-label{font-size:11px;color:var(--gh-muted)}
+.stat-trend{
+  font-size:11px;display:flex;align-items:center;gap:4px;margin-top:2px}
+.stat-trend.up{color:var(--teal)}
+.stat-trend.down{color:var(--red)}
+
+/* ─── CHARTS ─── */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.chart-section{padding:16px}
+.chart-label{font-size:12px;color:var(--gh-muted);margin-bottom:4px;
+  display:flex;align-items:center;justify-content:space-between}
+.legend-pills{display:flex;gap:8px;flex-wrap:wrap}
+.legend-pill{font-size:11px;display:flex;align-items:center;gap:4px;color:var(--gh-muted)}
+.legend-pill::before{content:'';width:10px;height:10px;border-radius:2px}
+.l-all::before{background:var(--blue)}
+.l-critical::before{background:var(--red)}
+.l-high::before{background:var(--orange)}
+.l-med::before{background:var(--yellow)}
+.l-low::before{background:var(--teal)}
+
+/* ─── SECTION DIVIDER ─── */
+.section-tag{
+  display:flex;align-items:center;gap:10px;margin:20px 0 14px;
+  font-size:13px;font-weight:600;color:var(--gh-text)}
+.section-tag::after{content:'';flex:1;height:1px;background:var(--gh-border)}
+
+/* ─── TABLE ─── */
+.gh-table-wrap{overflow-x:auto}
+.gh-table{width:100%;border-collapse:collapse;font-size:13px}
+.gh-table thead tr{background:var(--gh-canvas);border-bottom:1px solid var(--gh-border)}
+.gh-table th{
+  padding:10px 14px;font-size:11px;font-weight:600;
+  color:var(--gh-muted);text-transform:uppercase;letter-spacing:.5px;
+  text-align:left;white-space:nowrap}
+.gh-table td{
+  padding:10px 14px;border-bottom:1px solid var(--gh-border-dim);
+  color:var(--gh-muted);vertical-align:middle}
+.gh-table tbody tr:hover{background:rgba(255,255,255,.02);cursor:pointer}
+.gh-table .id-cell{font-family:var(--font-mono);font-size:12px;
+  color:var(--blue);font-weight:600}
+.gh-table .title-cell{color:var(--gh-text);max-width:250px}
+
+.priority-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  border-radius:20px;padding:2px 8px;font-size:11px;font-weight:600;border:1px solid}
+.p-critical{background:rgba(218,54,51,.1);color:var(--red);border-color:rgba(218,54,51,.3)}
+.p-high{background:rgba(240,136,62,.1);color:var(--orange);border-color:rgba(240,136,62,.3)}
+.p-medium{background:rgba(210,153,34,.1);color:var(--yellow);border-color:rgba(210,153,34,.3)}
+.p-low{background:rgba(63,185,80,.1);color:var(--teal);border-color:rgba(63,185,80,.3)}
+
+.status-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  border-radius:20px;padding:2px 8px;font-size:11px;font-weight:500;border:1px solid}
+.s-assigned{background:rgba(56,139,253,.1);color:var(--blue);border-color:rgba(56,139,253,.3)}
+.s-progress{background:rgba(210,153,34,.1);color:var(--yellow);border-color:rgba(210,153,34,.3)}
+.s-resolved{background:rgba(63,185,80,.1);color:var(--teal);border-color:rgba(63,185,80,.3)}
+.s-breached{background:rgba(218,54,51,.1);color:var(--red);border-color:rgba(218,54,51,.3)}
+.status-badge i{font-size:9px}
+
+.sla-ok{color:var(--teal);font-size:12px;display:flex;align-items:center;gap:4px}
+.sla-breach{color:var(--red);font-size:12px;display:flex;align-items:center;gap:4px;font-weight:600}
+
+/* ─── CONSOLE TOOLBAR ─── */
+.console-toolbar{
+  display:flex;align-items:center;gap:10px;padding:12px 16px;
+  border-bottom:1px solid var(--gh-border);background:var(--gh-canvas);
+  flex-wrap:wrap}
+.search-field{
+  flex:1;min-width:200px;display:flex;align-items:center;gap:8px;
+  background:var(--gh-overlay);border:1px solid var(--gh-border);
+  border-radius:6px;padding:5px 12px}
+.search-field i{color:var(--gh-muted);font-size:13px}
+.search-field input{
+  background:none;border:none;outline:none;color:var(--gh-text);
+  font-size:13px;flex:1}
+.search-field input::placeholder{color:var(--gh-subtle)}
+.preset-dropdown{
+  display:flex;align-items:center;gap:6px;
+  background:var(--gh-overlay);border:1px solid var(--gh-border);
+  border-radius:6px;padding:5px 12px;color:var(--gh-muted);
+  font-size:13px;cursor:pointer;transition:all .15s}
+.preset-dropdown:hover{color:var(--gh-text);border-color:var(--gh-muted)}
+
+/* ─── SMART RECORDER ─── */
+.recorder-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+.lookup-field{
+  display:flex;align-items:center;gap:10px;
+  background:var(--gh-canvas);border:1px solid var(--gh-border);
+  border-radius:6px;padding:8px 14px;transition:border-color .15s}
+.lookup-field:focus-within{border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-glow)}
+.lookup-field i{color:var(--gh-muted)}
+.lookup-field input{
+  flex:1;background:none;border:none;outline:none;
+  color:var(--gh-text);font-size:14px}
+.lookup-result{
+  background:var(--gh-overlay);border:1px solid var(--accent);
+  border-radius:8px;padding:16px;margin-top:12px;
+  animation:fadein .2s ease;display:none}
+.result-header{
+  display:flex;align-items:center;gap:8px;margin-bottom:12px;
+  font-weight:600;color:var(--gh-text)}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.result-field{font-size:12px}
+.result-field-label{color:var(--gh-muted);margin-bottom:2px}
+.result-field-val{color:var(--gh-text);font-weight:500}
+
+.quick-actions .card-body{display:flex;flex-direction:column;gap:8px}
+.quick-action-btn{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:6px;cursor:pointer;
+  background:var(--gh-canvas);border:1px solid var(--gh-border);
+  color:var(--gh-muted);font-size:13px;transition:all .15s;width:100%}
+.quick-action-btn:hover{border-color:var(--accent);color:var(--gh-text);
+  background:var(--gh-overlay)}
+.quick-action-btn i{width:16px;text-align:center;color:var(--accent)}
+
+/* ─── INCIDENT FORM ─── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group.full{grid-column:span 2}
+.form-label{font-size:11px;font-weight:600;color:var(--gh-muted);
+  text-transform:uppercase;letter-spacing:.5px}
+.form-control{
+  background:var(--gh-canvas);border:1px solid var(--gh-border);
+  border-radius:6px;padding:8px 12px;color:var(--gh-text);
+  font-size:13px;outline:none;transition:border-color .15s;width:100%}
+.form-control:focus{border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-glow)}
+.form-control:disabled{opacity:.4;cursor:not-allowed}
+textarea.form-control{resize:vertical;font-family:var(--font-mono);font-size:12px}
+select.form-control option{background:var(--gh-overlay)}
+
+/* ─── B2B FOOTER ─── */
+.b2b-footer{
+  border-top:1px solid var(--gh-border);padding:20px 24px;
+  background:var(--gh-surface)}
+.b2b-footer-title{
+  font-size:11px;font-weight:600;color:var(--gh-muted);
   text-transform:uppercase;letter-spacing:.8px;
-  display:flex;align-items:center;gap:7px;
-}
-.ch-title i{font-size:10px;color:var(--txt2)}
-.cb{padding:14px}
+  display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.b2b-footer-title::after{content:'';flex:1;height:1px;background:var(--gh-border)}
+.b2b-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}
 
-/* ── STATS ── */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--b1)}
-.sp{
-  padding:14px 16px;border-right:1px solid var(--b1);
-}
-.sp:last-child{border-right:none}
-.sv{font-size:22px;font-weight:700;font-family:var(--mono);letter-spacing:-1px;margin-bottom:3px;line-height:1}
-.sv.g{color:var(--g)}
-.sv.r{color:var(--r)}
-.sv.b{color:var(--bl)}
-.sv.a{color:var(--a)}
-.sl{font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
-.str{font-size:10px;display:flex;align-items:center;gap:3px}
-.str.up{color:var(--g)}.str.dn{color:var(--r)}.str.ne{color:var(--txt2)}
+.b2b-node{
+  background:var(--gh-canvas);border:1px solid var(--gh-border);
+  border-radius:6px;padding:10px 12px;position:relative;overflow:hidden}
+.b2b-node::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.b2b-node.green::before{background:var(--teal)}
+.b2b-node.blue::before{background:var(--blue)}
+.b2b-node.yellow::before{background:var(--yellow)}
+.b2b-node.red::before{background:var(--red)}
+.b2b-node.purple::before{background:var(--purple)}
+.b2b-node-label{font-size:10px;color:var(--gh-subtle);margin-bottom:4px}
+.b2b-node-val{font-size:12px;font-weight:600;font-family:var(--font-mono)}
+.b2b-node-val.green{color:var(--teal)}
+.b2b-node-val.blue{color:var(--blue)}
+.b2b-node-val.yellow{color:var(--yellow)}
+.b2b-node-val.red{color:var(--red)}
+.b2b-node-val.purple{color:var(--purple)}
+.b2b-pulse{
+  width:6px;height:6px;border-radius:50%;
+  display:inline-block;margin-right:4px;vertical-align:middle}
+.b2b-pulse.green{background:var(--teal);box-shadow:0 0 4px var(--teal);
+  animation:pulse-dot 2s infinite}
+.b2b-pulse.yellow{background:var(--yellow)}
+.b2b-pulse.red{background:var(--red);animation:pulse-dot 1s infinite}
+.b2b-pulse.blue{background:var(--blue)}
+.b2b-pulse.purple{background:var(--purple)}
 
-/* ── CHARTS ── */
-.cg{display:grid;grid-template-columns:1fr 1fr}
-.cs{padding:14px;border-right:1px solid var(--b1)}
-.cs:last-child{border-right:none}
-.cl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--txt3);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
-.lp{display:flex;gap:8px}
-.lpi{font-size:10px;display:flex;align-items:center;gap:3px;color:var(--txt2)}
-.lpi::before{content:'';width:7px;height:7px;border-radius:2px}
-.la::before{background:var(--bl)}.lc::before{background:var(--r)}.lh::before{background:#f97316}.lm::before{background:var(--a)}.ll::before{background:var(--g)}
+/* ─── REPORTS PAGE ─── */
+.report-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.kpi-card{
+  background:var(--gh-surface);border:1px solid var(--gh-border);
+  border-radius:8px;padding:16px;position:relative;overflow:hidden}
+.kpi-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,currentColor,transparent)}
+.kpi-card.green::after{color:var(--teal)}
+.kpi-card.red::after{color:var(--red)}
+.kpi-card.blue::after{color:var(--blue)}
+.kpi-card.yellow::after{color:var(--yellow)}
+.kpi-num{font-size:28px;font-weight:800;font-family:var(--font-mono);margin-bottom:2px}
+.kpi-desc{font-size:11px;color:var(--gh-muted)}
+.kpi-icon{position:absolute;right:14px;top:14px;font-size:20px;opacity:.15}
 
-/* ── SECTION TAG ── */
-.stag{
-  display:flex;align-items:center;gap:8px;
-  margin:16px 0 10px;
-  font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt2);
-}
-.stag::after{content:'';flex:1;height:1px;background:var(--b1)}
+/* ─── TIMELINE / ACTIVITY ─── */
+.activity-feed{display:flex;flex-direction:column;gap:0}
+.activity-item{
+  display:flex;gap:12px;padding:10px 0;
+  border-bottom:1px solid var(--gh-border-dim)}
+.activity-item:last-child{border-bottom:none}
+.activity-dot{
+  width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.activity-dot.green{background:var(--teal)}
+.activity-dot.red{background:var(--red)}
+.activity-dot.yellow{background:var(--yellow)}
+.activity-dot.blue{background:var(--blue)}
+.activity-text{font-size:13px;color:var(--gh-muted);line-height:1.4}
+.activity-text strong{color:var(--gh-text)}
+.activity-time{font-size:11px;color:var(--gh-subtle);font-family:var(--font-mono);
+  margin-top:2px}
 
-/* ── TABLE ── */
-.tw{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:12px}
-thead tr{background:rgba(6,8,12,.5);border-bottom:1px solid var(--b1)}
-th{padding:9px 12px;font-size:9px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;text-align:left;white-space:nowrap}
-td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--txt2);vertical-align:middle}
-tbody tr{transition:background .1s;cursor:pointer}
-tbody tr:hover{background:rgba(0,180,216,.03)}
-tbody tr:hover td{color:var(--txt)}
-.idc{font-family:var(--mono);font-size:11px;color:var(--bl);font-weight:600}
-.tc{color:var(--txt);max-width:230px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--gh-canvas)}
+::-webkit-scrollbar-thumb{background:var(--gh-border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--gh-muted)}
 
-.pb{display:inline-flex;align-items:center;gap:3px;border-radius:20px;padding:2px 7px;font-size:9px;font-weight:700;border:1px solid;letter-spacing:.3px;text-transform:uppercase}
-.p-c{background:rgba(255,64,96,.08);color:var(--r);border-color:rgba(255,64,96,.25)}
-.p-h{background:rgba(249,115,22,.08);color:#f97316;border-color:rgba(249,115,22,.25)}
-.p-m{background:rgba(240,165,0,.08);color:var(--a);border-color:rgba(240,165,0,.25)}
-.p-l{background:rgba(0,200,150,.08);color:var(--g);border-color:rgba(0,200,150,.25)}
-
-.sb{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:2px 7px;font-size:9px;font-weight:600;border:1px solid}
-.s-a{background:rgba(64,128,255,.08);color:var(--bl);border-color:rgba(64,128,255,.25)}
-.s-p{background:rgba(240,165,0,.08);color:var(--a);border-color:rgba(240,165,0,.25)}
-.s-r{background:rgba(0,200,150,.08);color:var(--g);border-color:rgba(0,200,150,.25)}
-
-.sla-ok{color:var(--g);font-size:11px;display:flex;align-items:center;gap:3px;font-weight:600}
-.sla-br{color:var(--r);font-size:11px;display:flex;align-items:center;gap:3px;font-weight:700}
-
-/* ── TOOLBAR ── */
-.tb-bar{
-  display:flex;align-items:center;gap:7px;padding:10px 14px;
-  border-bottom:1px solid var(--b1);background:rgba(6,8,12,.3);flex-wrap:wrap;
-}
-.sf{
-  flex:1;min-width:200px;display:flex;align-items:center;gap:7px;
-  background:var(--b0);border:1px solid var(--b1);border-radius:5px;padding:6px 10px;
-  transition:border-color .12s;
-}
-.sf:focus-within{border-color:rgba(0,180,216,.4);box-shadow:0 0 0 2px rgba(0,180,216,.08)}
-.sf i{color:var(--txt3);font-size:11px}
-.sf input{background:none;border:none;outline:none;color:var(--txt);font-size:12px;flex:1}
-.sf input::placeholder{color:var(--txt3)}
-.fd{
-  display:flex;align-items:center;gap:5px;
-  background:var(--b0);border:1px solid var(--b1);border-radius:5px;
-  padding:6px 10px;color:var(--txt2);font-size:11px;cursor:pointer;transition:all .12s;white-space:nowrap;
-}
-.fd:hover{border-color:var(--b2);color:var(--txt)}
-.fd i{font-size:9px}
-
-/* ── RECORDER ── */
-.rg{display:grid;grid-template-columns:2fr 1fr;gap:14px}
-.lf{
-  display:flex;align-items:center;gap:8px;
-  background:var(--b0);border:1px solid var(--b1);border-radius:5px;padding:9px 12px;transition:all .12s;
-}
-.lf:focus-within{border-color:rgba(0,180,216,.5);box-shadow:0 0 0 3px rgba(0,180,216,.07)}
-.lf i{color:var(--txt2)}
-.lf input{flex:1;background:none;border:none;outline:none;color:var(--txt);font-size:13px}
-
-.lr{
-  background:rgba(0,180,216,.04);border:1px solid rgba(0,180,216,.25);
-  border-radius:7px;padding:14px;margin-top:10px;animation:fi .2s ease;display:none;
-}
-.rh{display:flex;align-items:center;gap:7px;margin-bottom:10px;font-weight:600;color:var(--txt)}
-.rg2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.rf-label{font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
-.rf-val{font-size:12px;font-weight:500;color:var(--txt)}
-
-.qa-btn{
-  display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:5px;
-  cursor:pointer;background:var(--b0);border:1px solid var(--b1);
-  color:var(--txt2);font-size:12px;font-weight:500;transition:all .12s;width:100%;
-}
-.qa-btn:hover{border-color:rgba(0,180,216,.3);color:var(--c);background:rgba(0,180,216,.05)}
-.qa-btn i{width:14px;text-align:center;color:var(--c);font-size:11px}
-
-/* ── FORM ── */
-.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.fgr{display:flex;flex-direction:column;gap:4px}
-.fgr.full{grid-column:span 2}
-.fl{font-size:9px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px}
-.fc{
-  background:var(--b0);border:1px solid var(--b1);border-radius:5px;
-  padding:7px 10px;color:var(--txt);font-size:12px;outline:none;
-  transition:all .12s;width:100%;font-family:'Inter',sans-serif;
-}
-.fc:focus{border-color:rgba(0,180,216,.4);box-shadow:0 0 0 2px rgba(0,180,216,.07)}
-.fc:disabled{opacity:.35;cursor:not-allowed}
-textarea.fc{resize:vertical;font-family:var(--mono);font-size:11px}
-select.fc option{background:var(--bg3)}
-
-/* ── KPI ── */
-.kg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
-.kc{
-  background:rgba(11,15,23,.8);border:1px solid var(--b1);border-radius:7px;
-  padding:16px;position:relative;overflow:hidden;backdrop-filter:blur(10px);
-}
-.kc::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px}
-.kc.g::before{background:var(--g)}.kc.r::before{background:var(--r)}
-.kc.b::before{background:var(--bl)}.kc.a::before{background:var(--a)}
-.kn{font-size:28px;font-weight:800;font-family:var(--mono);margin-bottom:3px;letter-spacing:-1px;line-height:1}
-.kd{font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px}
-.ki{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:30px;opacity:.05}
-
-/* ── ACTIVITY ── */
-.af{display:flex;flex-direction:column}
-.ai{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.03)}
-.ai:last-child{border-bottom:none}
-.adot{width:6px;height:6px;border-radius:50%;margin-top:5px;flex-shrink:0}
-.adot.g{background:var(--g)}.adot.r{background:var(--r)}.adot.a{background:var(--a)}.adot.b{background:var(--bl)}
-.at{font-size:12px;color:var(--txt2);line-height:1.4}
-.at strong{color:var(--txt)}
-.atm{font-size:10px;color:var(--txt3);font-family:var(--mono);margin-top:1px}
-
-/* ── SLA BAR ── */
-.sbar-track{background:var(--b0);border-radius:2px;height:3px;overflow:hidden}
-.sbar-fill{height:100%;border-radius:2px;transition:width .4s}
-
-/* ── TELEMETRY FOOTER ── */
-.tf{
-  border-top:1px solid var(--b1);padding:12px 18px;
-  background:rgba(4,6,10,.9);backdrop-filter:blur(20px);flex-shrink:0;
-}
-.tf-title{font-size:9px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.2px;display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.tf-title::after{content:'';flex:1;height:1px;background:var(--b1)}
-.tg{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
-.tn{background:var(--b0);border:1px solid var(--b1);border-radius:5px;padding:8px 10px;position:relative;overflow:hidden}
-.tn::before{content:'';position:absolute;top:0;left:0;right:0;height:1px}
-.tn.g::before{background:var(--g)}.tn.b::before{background:var(--bl)}.tn.a::before{background:var(--a)}.tn.p::before{background:var(--p)}
-.tl{font-size:9px;color:var(--txt3);margin-bottom:3px;letter-spacing:.3px}
-.tv{font-size:9px;font-weight:700;font-family:var(--mono);display:flex;align-items:center;gap:3px}
-.tv.g{color:var(--g)}.tv.b{color:var(--bl)}.tv.a{color:var(--a)}.tv.p{color:var(--p)}
-.tdot{width:4px;height:4px;border-radius:50%;flex-shrink:0}
-.tdot.g{background:var(--g);box-shadow:0 0 4px var(--g);animation:blink 2s infinite}
-.tdot.b{background:var(--bl)}.tdot.a{background:var(--a)}.tdot.p{background:var(--p)}
-
-.av-chip{
-  width:22px;height:22px;border-radius:50%;background:var(--b1);border:1px solid var(--b2);
-  display:inline-flex;align-items:center;justify-content:center;
-  font-size:9px;font-weight:700;color:var(--txt2);margin-right:5px;flex-shrink:0;
-}
-
-/* page footer spacing fix */
-.page-inner-footer{margin:0 -20px -20px}
 </style>
 </head>
 <body>
-<div class="shell">
 
-<!-- HEADER -->
-<header>
-  <a class="logo" href="#">
-    <div class="logo-mark"><i class="fas fa-microchip"></i></div>
-    <div>
-      <div class="logo-name">Smart IT</div>
-      <div class="logo-tier">Enterprise</div>
-    </div>
+<!-- ════════════════ HEADER ════════════════ -->
+<header class="gh-header">
+  <a class="gh-logo" href="#">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482
+        0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.155-1.11-1.463-1.11-1.463
+        -.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832
+        .092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683
+        -.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836
+        c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1
+        2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678
+        1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22
+        12c0-5.523-4.477-10-10-10z"/>
+    </svg>
+    SMART IT <span class="brand-b2b">B2B</span>
   </a>
 
-  <div class="sys-pills">
-    <div class="pill ok"><span class="dot"></span>API</div>
-    <div class="pill ok"><span class="dot"></span>DB</div>
-    <div class="pill warn"><span class="dot"></span>LDAP</div>
-    <div class="pill ok"><span class="dot"></span>SLA</div>
-  </div>
+  <nav class="gh-nav">
+    <div class="gh-nav-item active" onclick="showPage('dashboard',this)">
+      <i class="fas fa-chart-line"></i> Dashboard
+    </div>
 
-  <nav>
-    <div class="ni active" onclick="nav('dashboard',this)"><i class="fas fa-chart-line"></i> Dashboard</div>
-    <div class="ni dd" onclick="nav('console',this)">
-      <i class="fas fa-ticket"></i> Console <i class="fas fa-caret-down" style="font-size:8px;opacity:.5"></i>
-      <div class="dd-menu" onclick="event.stopPropagation()">
-        <div class="dd-item" onclick="nav('console',null)"><i class="fas fa-list"></i> Ticket Console</div>
-        <div class="dd-item"><i class="fas fa-layer-group"></i> My Groups</div>
-        <div class="dd-item"><i class="fas fa-clock"></i> SLA Breached</div>
+    <div class="gh-nav-item nav-dropdown" onclick="showPage('console',this)">
+      <i class="fas fa-ticket"></i> Console
+      <i class="fas fa-caret-down" style="font-size:10px;opacity:.6"></i>
+      <div class="nav-dropdown-menu" onclick="event.stopPropagation()">
+        <div class="nav-dropdown-item" onclick="showPage('console',null)"><i class="fas fa-list"></i> Ticket Console</div>
+        <div class="nav-dropdown-item"><i class="fas fa-layer-group"></i> My Groups' Tickets</div>
+        <div class="nav-dropdown-item"><i class="fas fa-clock"></i> SLA Breached</div>
       </div>
     </div>
-    <div class="ni" onclick="nav('recorder',this)"><i class="fas fa-headset"></i> Smart Recorder</div>
-    <div class="ni dd">
-      <i class="fas fa-plus"></i> Create <i class="fas fa-caret-down" style="font-size:8px;opacity:.5"></i>
-      <div class="dd-menu">
-        <div class="dd-item" onclick="nav('incident',null)"><i class="fas fa-triangle-exclamation"></i> New Incident</div>
-        <div class="dd-item"><i class="fas fa-wrench"></i> Work Order</div>
-        <div class="dd-item"><i class="fas fa-star"></i> Service Request</div>
+
+    <div class="gh-nav-item" onclick="showPage('recorder',this)">
+      <i class="fas fa-headset"></i> Smart Recorder
+    </div>
+
+    <div class="gh-nav-item nav-dropdown">
+      <i class="fas fa-plus"></i> Create New
+      <i class="fas fa-caret-down" style="font-size:10px;opacity:.6"></i>
+      <div class="nav-dropdown-menu">
+        <div class="nav-dropdown-item" onclick="showPage('incident',null)"><i class="fas fa-triangle-exclamation"></i> New Incident</div>
+        <div class="nav-dropdown-item"><i class="fas fa-wrench"></i> New Work Order</div>
+        <div class="nav-dropdown-item"><i class="fas fa-star"></i> Service Request</div>
       </div>
     </div>
-    <div class="ni" onclick="nav('reports',this)"><i class="fas fa-chart-bar"></i> Reports</div>
+
+    <div class="gh-nav-item" onclick="showPage('reports',this)">
+      <i class="fas fa-chart-bar"></i> Reports
+    </div>
   </nav>
 
-  <div class="hr">
-    <div class="clock"><div class="t" id="ct">--:--:--</div><div id="cd">---</div></div>
-    <div class="icon-btn"><i class="fas fa-bell" style="font-size:11px"></i><span class="ndot"></span></div>
-    <div class="icon-btn"><i class="fas fa-gear" style="font-size:11px"></i></div>
-    <div class="admin">
-      <div class="admin-text">
-        <div class="admin-name">Naif Al-Rashidi</div>
-        <div class="admin-role">Administrator</div>
-      </div>
-      <div class="admin-av">NA</div>
-    </div>
+  <div class="gh-header-right">
+    <div class="status-dot">OAuth2 Active</div>
+    <div class="avatar" title="Faisal Al-Rashidi">FA</div>
   </div>
 </header>
 
-<!-- BODY -->
-<div class="body">
+<!-- ════════════════ APP BODY ════════════════ -->
+<div class="app-body">
 
   <!-- SIDEBAR -->
-  <aside>
-    <div class="sec">
-      <div class="sec-label">Service Delivery</div>
-      <div class="si active" onclick="nav('dashboard',null)"><i class="fas fa-gauge-high"></i> Overview</div>
-      <div class="si" onclick="nav('console',null)"><i class="fas fa-triangle-exclamation"></i> Incidents <span class="sc r">2</span></div>
-      <div class="si" onclick="nav('console',null)"><i class="fas fa-wrench"></i> Work Orders <span class="sc g">OK</span></div>
-      <div class="si"><i class="fas fa-star"></i> Service Requests <span class="sc b">16</span></div>
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Service Delivery</div>
+      <div class="sidebar-item active" onclick="showPage('dashboard',null)">
+        <i class="fas fa-gauge-high"></i> Overview
+      </div>
+      <div class="sidebar-item" onclick="showPage('console',null)">
+        <i class="fas fa-triangle-exclamation"></i> Incidents
+        <span class="sidebar-count">2</span>
+      </div>
+      <div class="sidebar-item" onclick="showPage('console',null)">
+        <i class="fas fa-wrench"></i> Work Orders
+        <span class="sidebar-count ok">OK</span>
+      </div>
+      <div class="sidebar-item">
+        <i class="fas fa-star"></i> Service Requests
+      </div>
     </div>
-    <div class="sec">
-      <div class="sec-label">Operations</div>
-      <div class="si" onclick="nav('recorder',null)"><i class="fas fa-headset"></i> Smart Recorder</div>
-      <div class="si" onclick="nav('reports',null)"><i class="fas fa-chart-bar"></i> Reports</div>
-      <div class="si"><i class="fas fa-users"></i> Assignees</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Operations</div>
+      <div class="sidebar-item" onclick="showPage('recorder',null)">
+        <i class="fas fa-headset"></i> Smart Recorder
+      </div>
+      <div class="sidebar-item" onclick="showPage('reports',null)">
+        <i class="fas fa-chart-bar"></i> Reports
+      </div>
+      <div class="sidebar-item">
+        <i class="fas fa-users"></i> Assignees
+      </div>
+      <div class="sidebar-item">
+        <i class="fas fa-gear"></i> Configuration
+      </div>
     </div>
-    <div class="sec">
-      <div class="sec-label">Administration</div>
-      <div class="si"><i class="fas fa-shield-halved"></i> Access Control</div>
-      <div class="si"><i class="fas fa-sliders"></i> SLA Config</div>
-      <div class="si"><i class="fas fa-server"></i> System</div>
-      <div class="si"><i class="fas fa-key"></i> API Keys</div>
-      <div class="si"><i class="fas fa-scroll"></i> Audit Log</div>
-    </div>
-    <div class="acc-card">
-      <div class="acc-name">SALAM MOBILE</div>
-      <div class="acc-sub">Enterprise Account · KSA</div>
-      <div class="acc-badge"><i class="fas fa-building"></i> Corporate Gold</div>
+
+    <div class="sidebar-company">
+      <div class="company-name">SALAM MOBILE</div>
+      <div class="company-sub">Enterprise Account</div>
+      <div class="company-badge"><i class="fas fa-building"></i> Corporate</div>
     </div>
   </aside>
 
   <!-- MAIN -->
-  <main>
+  <main class="main">
 
-    <!-- DASHBOARD -->
+    <!-- ══ DASHBOARD ══ -->
     <div id="page-dashboard" class="page active">
-      <div class="ph">
-        <div class="ph-left">
-          <div class="eyebrow">Service Delivery</div>
-          <div class="title"><i class="fas fa-chart-line"></i> Operations Dashboard · SALAM MOBILE</div>
+
+      <div class="page-header">
+        <div class="page-title">
+          <i class="fas fa-chart-line"></i> Service Delivery · SALAM MOBILE
         </div>
-        <div class="ph-right">
-          <div class="tog">
-            <button class="tb" onclick="tog(this)">30D</button>
-            <button class="tb active" onclick="tog(this)">180D</button>
-            <button class="tb" onclick="tog(this)">1Y</button>
+        <div class="page-actions">
+          <div class="toggle-group">
+            <button class="toggle-btn" onclick="toggleRange(this,'30')">30 Days</button>
+            <button class="toggle-btn active" onclick="toggleRange(this,'180')">180 Days</button>
           </div>
-          <select class="btn btn-s" style="font-size:11px"><option>My Groups</option><option>All Groups</option></select>
-          <button class="btn btn-p"><i class="fas fa-arrow-rotate-right"></i> Refresh</button>
+          <select class="btn btn-secondary" style="padding:5px 10px;border-radius:6px">
+            <option>My Groups</option>
+            <option>All Groups</option>
+          </select>
         </div>
       </div>
 
-      <div class="stag"><i class="fas fa-triangle-exclamation" style="color:var(--r)"></i> Incident</div>
+      <!-- INCIDENT SECTION -->
+      <div class="section-tag"><i class="fas fa-triangle-exclamation" style="color:var(--red)"></i> Incident</div>
+
       <div class="card">
-        <div class="stats">
-          <div class="sp"><div class="sv g">90.89%</div><div class="sl">On-Time Completions</div><div class="str up"><i class="fas fa-arrow-trend-up"></i> +2.1%</div></div>
-          <div class="sp"><div class="sv g">99.07%</div><div class="sl">Resolutions Accepted</div><div class="str up"><i class="fas fa-arrow-trend-up"></i> +0.3%</div></div>
-          <div class="sp"><div class="sv b">44.28%</div><div class="sl">First-Call Resolutions</div><div class="str dn"><i class="fas fa-arrow-trend-down"></i> -1.4%</div></div>
-          <div class="sp"><div class="sv a">2,160</div><div class="sl">Backlog Peak (180d)</div><div class="str ne"><i class="fas fa-arrow-trend-down"></i> trending down</div></div>
+        <div class="stat-row">
+          <div class="stat-pill">
+            <div class="stat-val green">90.89%</div>
+            <div class="stat-label">On-Time Completions</div>
+            <div class="stat-trend up"><i class="fas fa-arrow-trend-up"></i> +2.1% vs last period</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-val green">99.07%</div>
+            <div class="stat-label">Resolutions Accepted</div>
+            <div class="stat-trend up"><i class="fas fa-arrow-trend-up"></i> +0.3%</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-val blue">44.28%</div>
+            <div class="stat-label">First-Call Resolutions</div>
+            <div class="stat-trend down"><i class="fas fa-arrow-trend-down"></i> -1.4%</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-val yellow">2,160</div>
+            <div class="stat-label">Backlog Peak (180d)</div>
+            <div class="stat-trend down"><i class="fas fa-arrow-trend-down"></i> trending down</div>
+          </div>
         </div>
-        <div class="cg">
-          <div class="cs"><div class="cl">Incident Backlog <div class="lp"><span class="lpi la">All</span><span class="lpi lc">Critical</span></div></div><canvas id="ch1" height="120"></canvas></div>
-          <div class="cs"><div class="cl">Open by Status <div class="lp"><span class="lpi lc">Crit</span><span class="lpi lh">High</span><span class="lpi lm">Med</span><span class="lpi ll">Low</span></div></div><canvas id="ch2" height="120"></canvas></div>
+
+        <div class="charts-grid">
+          <div class="chart-section">
+            <div class="chart-label">
+              Incident Backlog
+              <div class="legend-pills">
+                <span class="legend-pill l-all">All</span>
+                <span class="legend-pill l-critical">Critical</span>
+              </div>
+            </div>
+            <canvas id="incidentBacklog" height="130"></canvas>
+          </div>
+          <div class="chart-section">
+            <div class="chart-label">
+              Open Incidents by Status
+              <div class="legend-pills">
+                <span class="legend-pill l-critical">Critical</span>
+                <span class="legend-pill l-high">High</span>
+                <span class="legend-pill l-med">Medium</span>
+                <span class="legend-pill l-low">Low</span>
+              </div>
+            </div>
+            <canvas id="incidentOpen" height="130"></canvas>
+          </div>
         </div>
       </div>
 
-      <div class="stag"><i class="fas fa-wrench" style="color:var(--bl)"></i> Work Order</div>
+      <!-- WORK ORDER SECTION -->
+      <div class="section-tag"><i class="fas fa-wrench" style="color:var(--blue)"></i> Work Order</div>
+
       <div class="card">
-        <div class="stats">
-          <div class="sp"><div class="sv g">80.21%</div><div class="sl">On-Time Operations</div><div class="str up"><i class="fas fa-arrow-trend-up"></i> +5.6%</div></div>
-          <div class="sp"><div class="sv g">0%</div><div class="sl">Scheduled Delays</div><div class="str up"><i class="fas fa-check"></i> No delays</div></div>
-          <div class="sp"><div class="sv b">837</div><div class="sl">Open Work Orders</div><div class="str ne"><i class="fas fa-arrow-trend-down"></i> decreasing</div></div>
-          <div class="sp"><div class="sv a">8,537</div><div class="sl">Backlog Peak (180d)</div><div class="str dn"><i class="fas fa-arrow-trend-down"></i> high load</div></div>
+        <div class="stat-row">
+          <div class="stat-pill">
+            <div class="stat-val green">80.21%</div>
+            <div class="stat-label">On-Time Operations</div>
+            <div class="stat-trend up"><i class="fas fa-arrow-trend-up"></i> +5.6%</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-val green">0%</div>
+            <div class="stat-label">Scheduled Delays</div>
+            <div class="stat-trend up"><i class="fas fa-check"></i> No delays</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-val blue">837</div>
+            <div class="stat-label">Open Work Orders</div>
+            <div class="stat-trend up"><i class="fas fa-arrow-trend-down"></i> decreasing</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-val yellow">8,537</div>
+            <div class="stat-label">Backlog Peak (180d)</div>
+            <div class="stat-trend down"><i class="fas fa-arrow-trend-down"></i> high load</div>
+          </div>
         </div>
-        <div class="cg">
-          <div class="cs"><div class="cl">Work Order Backlog</div><canvas id="ch3" height="120"></canvas></div>
-          <div class="cs"><div class="cl">Open by Status</div><canvas id="ch4" height="120"></canvas></div>
+
+        <div class="charts-grid">
+          <div class="chart-section">
+            <div class="chart-label">Work Order Backlog
+              <div class="legend-pills"><span class="legend-pill l-all">All</span></div>
+            </div>
+            <canvas id="woBacklog" height="130"></canvas>
+          </div>
+          <div class="chart-section">
+            <div class="chart-label">Open Work Orders by Status
+              <div class="legend-pills">
+                <span class="legend-pill l-critical">Critical</span>
+                <span class="legend-pill l-high">High</span>
+                <span class="legend-pill l-med">Medium</span>
+                <span class="legend-pill l-low">Low</span>
+              </div>
+            </div>
+            <canvas id="woOpen" height="130"></canvas>
+          </div>
         </div>
       </div>
 
-      <div class="stag"><i class="fas fa-star" style="color:var(--p)"></i> Service Request</div>
+      <!-- SERVICE REQUEST SECTION -->
+      <div class="section-tag"><i class="fas fa-star" style="color:var(--purple)"></i> Service Request</div>
       <div class="card">
-        <div class="stats">
-          <div class="sp"><div class="sv r">0%</div><div class="sl">On-Time Completions</div><div class="str dn"><i class="fas fa-minus"></i> No activity</div></div>
-          <div class="sp"><div class="sv r">0%</div><div class="sl">Completions Accepted</div><div class="str dn"><i class="fas fa-minus"></i> Pending SRs</div></div>
-          <div class="sp"><div class="sv b">16</div><div class="sl">Open Requests</div></div>
-          <div class="sp"><div class="sv a">—</div><div class="sl">Avg Resolution Time</div></div>
+        <div class="stat-row">
+          <div class="stat-pill">
+            <div class="stat-val red">0%</div>
+            <div class="stat-label">On-Time Completions</div>
+            <div class="stat-trend down"><i class="fas fa-arrow-trend-down"></i> No activity</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-val red">0%</div>
+            <div class="stat-label">Completions Accepted</div>
+            <div class="stat-trend down"><i class="fas fa-minus"></i> pending SRs</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-val blue">16</div>
+            <div class="stat-label">Open Requests</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-val yellow">—</div>
+            <div class="stat-label">Avg Resolution Time</div>
+          </div>
         </div>
-        <div class="cg">
-          <div class="cs"><div class="cl">Request Backlog</div><canvas id="ch5" height="110"></canvas></div>
-          <div class="cs"><div class="cl">Open by Status</div><canvas id="ch6" height="110"></canvas></div>
+        <div class="charts-grid">
+          <div class="chart-section">
+            <div class="chart-label">Request Backlog
+              <div class="legend-pills"><span class="legend-pill l-all">All</span></div>
+            </div>
+            <canvas id="srBacklog" height="120"></canvas>
+          </div>
+          <div class="chart-section">
+            <div class="chart-label">Open Requests by Status</div>
+            <canvas id="srOpen" height="120"></canvas>
+          </div>
         </div>
       </div>
 
-      <div class="tf page-inner-footer">
-        <div class="tf-title"><i class="fas fa-server"></i> B2B Core Telemetry — Live</div>
-        <div class="tg">
-          <div class="tn g"><div class="tl">Active Directory</div><div class="tv g"><span class="tdot g"></span>CONNECTED</div></div>
-          <div class="tn b"><div class="tl">Django ORM</div><div class="tv b"><span class="tdot b"></span>POSTGRES_OK</div></div>
-          <div class="tn a"><div class="tl">LDAP Sync</div><div class="tv a"><span class="tdot a"></span>12ms lag</div></div>
-          <div class="tn g"><div class="tl">Express.js API</div><div class="tv g"><span class="tdot g"></span>ROUTING</div></div>
-          <div class="tn g"><div class="tl">OAuth2 Token</div><div class="tv g"><span class="tdot g"></span>VALID</div></div>
-          <div class="tn b"><div class="tl">Redis Cache</div><div class="tv b"><span class="tdot b"></span>HIT 94%</div></div>
-          <div class="tn p"><div class="tl">AI Inference</div><div class="tv p"><span class="tdot p"></span>ONLINE</div></div>
-          <div class="tn g"><div class="tl">SLA Engine</div><div class="tv g"><span class="tdot g"></span>MONITORING</div></div>
+      <!-- B2B FOOTER -->
+      <div class="b2b-footer" style="margin:0 -24px -24px;border-radius:0">
+        <div class="b2b-footer-title">
+          <i class="fas fa-server"></i> B2B Core Backend Telemetry — Live
+        </div>
+        <div class="b2b-grid">
+          <div class="b2b-node green">
+            <div class="b2b-node-label">Active Directory</div>
+            <div class="b2b-node-val green"><span class="b2b-pulse green"></span>CONNECTED</div>
+          </div>
+          <div class="b2b-node blue">
+            <div class="b2b-node-label">Django ORM</div>
+            <div class="b2b-node-val blue"><span class="b2b-pulse blue"></span>POSTGRES_OK</div>
+          </div>
+          <div class="b2b-node yellow">
+            <div class="b2b-node-label">LDAP Sync</div>
+            <div class="b2b-node-val yellow"><span class="b2b-pulse yellow"></span>12ms lag</div>
+          </div>
+          <div class="b2b-node green">
+            <div class="b2b-node-label">Express.js API</div>
+            <div class="b2b-node-val green"><span class="b2b-pulse green"></span>ROUTING</div>
+          </div>
+          <div class="b2b-node green">
+            <div class="b2b-node-label">OAuth2 Token</div>
+            <div class="b2b-node-val green"><span class="b2b-pulse green"></span>VALID</div>
+          </div>
+          <div class="b2b-node blue">
+            <div class="b2b-node-label">Redis Cache</div>
+            <div class="b2b-node-val blue"><span class="b2b-pulse blue"></span>HIT 94%</div>
+          </div>
+          <div class="b2b-node purple">
+            <div class="b2b-node-label">AI Inference</div>
+            <div class="b2b-node-val purple"><span class="b2b-pulse purple"></span>ONLINE</div>
+          </div>
+          <div class="b2b-node green">
+            <div class="b2b-node-label">SLA Engine</div>
+            <div class="b2b-node-val green"><span class="b2b-pulse green"></span>MONITORING</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- CONSOLE -->
+    </div><!-- /dashboard -->
+
+    <!-- ══ TICKET CONSOLE ══ -->
     <div id="page-console" class="page">
-      <div class="ph">
-        <div class="ph-left"><div class="eyebrow">Operations</div><div class="title"><i class="fas fa-ticket"></i> Ticket Console</div></div>
-        <div class="ph-right">
-          <button class="btn btn-s"><i class="fas fa-chart-bar"></i> Statistics</button>
-          <button class="btn btn-s"><i class="fas fa-filter"></i> Save Preset</button>
-          <button class="btn btn-p" onclick="nav('incident',null)"><i class="fas fa-plus"></i> New Incident</button>
+      <div class="page-header">
+        <div class="page-title"><i class="fas fa-ticket"></i> Ticket Console</div>
+        <div class="page-actions">
+          <button class="btn btn-secondary"><i class="fas fa-chart-bar"></i> Show Statistics</button>
+          <button class="btn btn-secondary"><i class="fas fa-filter"></i> Save as Preset</button>
+          <button class="btn btn-primary" onclick="showPage('incident',null)"><i class="fas fa-plus"></i> New Incident</button>
         </div>
       </div>
+
       <div class="card">
-        <div class="tb-bar">
-          <div class="sf"><i class="fas fa-magnifying-glass"></i><input type="text" id="ts" oninput="ft()" placeholder="Search by ID, customer, assignee, summary…"></div>
-          <div class="fd"><i class="fas fa-bookmark"></i> My Assigned <i class="fas fa-caret-down"></i></div>
-          <div class="fd"><i class="fas fa-filter"></i> All Priorities <i class="fas fa-caret-down"></i></div>
-          <div class="fd"><i class="fas fa-circle-half-stroke"></i> All Statuses <i class="fas fa-caret-down"></i></div>
-          <button class="btn btn-s" style="font-size:10px"><i class="fas fa-xmark"></i> Clear</button>
+        <div class="console-toolbar">
+          <div class="search-field">
+            <i class="fas fa-magnifying-glass"></i>
+            <input type="text" id="ticketSearch" oninput="filterTable()" placeholder="Filter by ID, customer, assignee, summary…">
+          </div>
+          <div class="preset-dropdown">
+            <i class="fas fa-bookmark"></i> My Assigned Tickets
+            <i class="fas fa-caret-down" style="font-size:10px"></i>
+          </div>
+          <div class="preset-dropdown">
+            <i class="fas fa-filter"></i> All Priorities
+            <i class="fas fa-caret-down" style="font-size:10px"></i>
+          </div>
+          <div class="preset-dropdown">
+            <i class="fas fa-circle-half-stroke"></i> All Statuses
+            <i class="fas fa-caret-down" style="font-size:10px"></i>
+          </div>
+          <button class="btn btn-secondary" style="font-size:12px"><i class="fas fa-xmark"></i> Clear Filters</button>
         </div>
-        <div class="tw">
-          <table id="tt">
-            <thead><tr>
-              <th>Priority</th><th>Incident ID</th><th>Target Date</th><th>SLA Status</th>
-              <th>Customer</th><th>Assignee</th><th>Summary</th><th>Status</th><th></th>
-            </tr></thead>
-            <tbody id="tb2">
-              <tr onclick="nav('incident',null)">
-                <td><span class="pb p-m"><i class="fas fa-minus"></i> Medium</span></td>
-                <td class="idc">INC00000017778</td>
-                <td style="font-family:var(--mono);font-size:11px">Jun 22, 2026</td>
+
+        <div class="gh-table-wrap">
+          <table class="gh-table" id="ticketTable">
+            <thead>
+              <tr>
+                <th>Priority</th>
+                <th>Incident ID</th>
+                <th>Target Date</th>
+                <th>SLA Status</th>
+                <th>Customer</th>
+                <th>Assignee</th>
+                <th>Summary</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="ticketBody">
+              <tr onclick="showPage('incident',null)">
+                <td><span class="priority-badge p-medium"><i class="fas fa-minus"></i> Medium</span></td>
+                <td class="id-cell">INC00000017778</td>
+                <td style="font-family:var(--font-mono);font-size:12px">Jun 22, 2026</td>
                 <td><span class="sla-ok"><i class="fas fa-circle-check"></i> In Process</span></td>
                 <td>Albandari Shabab</td>
-                <td><div style="display:flex;align-items:center"><span class="av-chip">AA</span>Aseel Al-Ahmadi</div></td>
-                <td class="tc">Fly vish Salam issues</td>
-                <td><span class="sb s-a"><i class="fas fa-circle" style="font-size:6px"></i> Assigned</span></td>
-                <td><button class="btn btn-s" style="font-size:10px;padding:2px 7px">Open</button></td>
+                <td><span style="display:flex;align-items:center;gap:6px"><span style="width:22px;height:22px;border-radius:50%;background:var(--gh-overlay);border:1px solid var(--gh-border);display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600">AA</span> Aseel Al-Ahmadi</span></td>
+                <td class="title-cell">Fly vish Salam issues</td>
+                <td><span class="status-badge s-assigned"><i class="fas fa-circle"></i> Assigned</span></td>
+                <td><button class="btn btn-secondary" style="font-size:11px;padding:3px 8px">Open</button></td>
               </tr>
               <tr>
-                <td><span class="pb p-h"><i class="fas fa-chevron-up"></i> High</span></td>
-                <td class="idc">INC00000017775</td>
-                <td style="font-family:var(--mono);font-size:11px;color:var(--r)">Jun 21, 2026</td>
-                <td><span class="sla-br"><i class="fas fa-triangle-exclamation"></i> Breached</span></td>
+                <td><span class="priority-badge p-high"><i class="fas fa-chevron-up"></i> High</span></td>
+                <td class="id-cell">INC00000017775</td>
+                <td style="font-family:var(--font-mono);font-size:12px;color:var(--red)">Jun 21, 2026</td>
+                <td><span class="sla-breach"><i class="fas fa-triangle-exclamation"></i> Breached</span></td>
                 <td>Nasser Al-Otaibi</td>
-                <td><div style="display:flex;align-items:center"><span class="av-chip">FM</span>Fahad Al-Malki</div></td>
-                <td class="tc">Temporary Suspension request</td>
-                <td><span class="sb s-p"><i class="fas fa-circle" style="font-size:6px"></i> In Progress</span></td>
-                <td><button class="btn btn-d" style="font-size:10px;padding:2px 7px">Urgent</button></td>
+                <td><span style="display:flex;align-items:center;gap:6px"><span style="width:22px;height:22px;border-radius:50%;background:var(--gh-overlay);border:1px solid var(--gh-border);display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600">FM</span> Fahad Al-Malki</span></td>
+                <td class="title-cell">Temporary Suspension request</td>
+                <td><span class="status-badge s-progress"><i class="fas fa-circle"></i> In Progress</span></td>
+                <td><button class="btn btn-danger" style="font-size:11px;padding:3px 8px">Urgent</button></td>
               </tr>
               <tr>
-                <td><span class="pb p-c"><i class="fas fa-skull-crossbones"></i> Critical</span></td>
-                <td class="idc">INC00000017770</td>
-                <td style="font-family:var(--mono);font-size:11px;color:var(--r)">Jun 20, 2026</td>
-                <td><span class="sla-br"><i class="fas fa-triangle-exclamation"></i> Breached</span></td>
+                <td><span class="priority-badge p-critical"><i class="fas fa-skull-crossbones"></i> Critical</span></td>
+                <td class="id-cell">INC00000017770</td>
+                <td style="font-family:var(--font-mono);font-size:12px;color:var(--red)">Jun 20, 2026</td>
+                <td><span class="sla-breach"><i class="fas fa-triangle-exclamation"></i> Breached</span></td>
                 <td>Mohammed Al-Ghamdi</td>
-                <td><div style="display:flex;align-items:center"><span class="av-chip">KA</span>Khalid Al-Anzi</div></td>
-                <td class="tc">Corporate gateway — continuous dropout</td>
-                <td><span class="sb s-p"><i class="fas fa-circle" style="font-size:6px"></i> In Progress</span></td>
-                <td><button class="btn btn-d" style="font-size:10px;padding:2px 7px">Urgent</button></td>
+                <td><span style="display:flex;align-items:center;gap:6px"><span style="width:22px;height:22px;border-radius:50%;background:var(--gh-overlay);border:1px solid var(--gh-border);display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600">KA</span> Khalid Al-Anzi</span></td>
+                <td class="title-cell">Corporate gateway node — continuous dropout</td>
+                <td><span class="status-badge s-progress"><i class="fas fa-circle"></i> In Progress</span></td>
+                <td><button class="btn btn-danger" style="font-size:11px;padding:3px 8px">Urgent</button></td>
               </tr>
               <tr>
-                <td><span class="pb p-l"><i class="fas fa-chevron-down"></i> Low</span></td>
-                <td class="idc">INC00000017765</td>
-                <td style="font-family:var(--mono);font-size:11px">Jun 25, 2026</td>
+                <td><span class="priority-badge p-low"><i class="fas fa-chevron-down"></i> Low</span></td>
+                <td class="id-cell">INC00000017765</td>
+                <td style="font-family:var(--font-mono);font-size:12px">Jun 25, 2026</td>
                 <td><span class="sla-ok"><i class="fas fa-circle-check"></i> On Track</span></td>
                 <td>Sara Al-Mutairi</td>
-                <td><div style="display:flex;align-items:center"><span class="av-chip">AA</span>Aseel Al-Ahmadi</div></td>
-                <td class="tc">Email sync delay — mobile clients</td>
-                <td><span class="sb s-a"><i class="fas fa-circle" style="font-size:6px"></i> Assigned</span></td>
-                <td><button class="btn btn-s" style="font-size:10px;padding:2px 7px">Open</button></td>
+                <td><span style="display:flex;align-items:center;gap:6px"><span style="width:22px;height:22px;border-radius:50%;background:var(--gh-overlay);border:1px solid var(--gh-border);display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600">AA</span> Aseel Al-Ahmadi</span></td>
+                <td class="title-cell">Email sync delay — mobile clients</td>
+                <td><span class="status-badge s-assigned"><i class="fas fa-circle"></i> Assigned</span></td>
+                <td><button class="btn btn-secondary" style="font-size:11px;padding:3px 8px">Open</button></td>
               </tr>
               <tr>
-                <td><span class="pb p-m"><i class="fas fa-minus"></i> Medium</span></td>
-                <td class="idc">INC00000017760</td>
-                <td style="font-family:var(--mono);font-size:11px">Jun 24, 2026</td>
+                <td><span class="priority-badge p-medium"><i class="fas fa-minus"></i> Medium</span></td>
+                <td class="id-cell">INC00000017760</td>
+                <td style="font-family:var(--font-mono);font-size:12px">Jun 24, 2026</td>
                 <td><span class="sla-ok"><i class="fas fa-circle-check"></i> In Process</span></td>
                 <td>Tariq Al-Harbi</td>
-                <td><div style="display:flex;align-items:center"><span class="av-chip">FM</span>Fahad Al-Malki</div></td>
-                <td class="tc">VPN certificate renewal — head office</td>
-                <td><span class="sb s-r"><i class="fas fa-circle" style="font-size:6px"></i> Resolved</span></td>
-                <td><button class="btn btn-s" style="font-size:10px;padding:2px 7px">Open</button></td>
+                <td><span style="display:flex;align-items:center;gap:6px"><span style="width:22px;height:22px;border-radius:50%;background:var(--gh-overlay);border:1px solid var(--gh-border);display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600">FM</span> Fahad Al-Malki</span></td>
+                <td class="title-cell">VPN certificate renewal — head office</td>
+                <td><span class="status-badge s-resolved"><i class="fas fa-circle"></i> Resolved</span></td>
+                <td><button class="btn btn-secondary" style="font-size:11px;padding:3px 8px">Open</button></td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div style="padding:10px 14px;border-top:1px solid var(--b1);display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--txt2)">
-          <span>Showing <strong style="color:var(--txt)" id="rc">5</strong> incidents</span>
-          <div style="display:flex;gap:5px">
-            <button class="btn btn-s" style="font-size:10px;padding:2px 8px">← Prev</button>
-            <button class="btn btn-s" style="font-size:10px;padding:2px 8px">Next →</button>
+
+        <div style="padding:12px 16px;border-top:1px solid var(--gh-border);
+          display:flex;justify-content:space-between;align-items:center;
+          font-size:12px;color:var(--gh-muted)">
+          <span>Showing <strong style="color:var(--gh-text)" id="rowCount">5</strong> incidents</span>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-secondary" style="font-size:11px;padding:3px 10px">← Prev</button>
+            <button class="btn btn-secondary" style="font-size:11px;padding:3px 10px">Next →</button>
           </div>
         </div>
       </div>
-      <div class="tf"><div class="tf-title"><i class="fas fa-server"></i> B2B Core Telemetry — Live</div><div class="tg"><div class="tn g"><div class="tl">Active Directory</div><div class="tv g"><span class="tdot g"></span>CONNECTED</div></div><div class="tn b"><div class="tl">Django ORM</div><div class="tv b"><span class="tdot b"></span>POSTGRES_OK</div></div><div class="tn a"><div class="tl">LDAP Sync</div><div class="tv a"><span class="tdot a"></span>12ms lag</div></div><div class="tn g"><div class="tl">Express.js API</div><div class="tv g"><span class="tdot g"></span>ROUTING</div></div><div class="tn g"><div class="tl">OAuth2 Token</div><div class="tv g"><span class="tdot g"></span>VALID</div></div><div class="tn b"><div class="tl">Redis Cache</div><div class="tv b"><span class="tdot b"></span>HIT 94%</div></div><div class="tn p"><div class="tl">AI Inference</div><div class="tv p"><span class="tdot p"></span>ONLINE</div></div><div class="tn g"><div class="tl">SLA Engine</div><div class="tv g"><span class="tdot g"></span>MONITORING</div></div></div></div>
-    </div>
 
-    <!-- RECORDER -->
+      <!-- B2B footer -->
+      <div class="b2b-footer">
+        <div class="b2b-footer-title"><i class="fas fa-server"></i> B2B Core Backend Telemetry — Live</div>
+        <div class="b2b-grid">
+          <div class="b2b-node green"><div class="b2b-node-label">Active Directory</div><div class="b2b-node-val green"><span class="b2b-pulse green"></span>CONNECTED</div></div>
+          <div class="b2b-node blue"><div class="b2b-node-label">Django ORM</div><div class="b2b-node-val blue"><span class="b2b-pulse blue"></span>POSTGRES_OK</div></div>
+          <div class="b2b-node yellow"><div class="b2b-node-label">LDAP Sync</div><div class="b2b-node-val yellow"><span class="b2b-pulse yellow"></span>12ms lag</div></div>
+          <div class="b2b-node green"><div class="b2b-node-label">Express.js API</div><div class="b2b-node-val green"><span class="b2b-pulse green"></span>ROUTING</div></div>
+          <div class="b2b-node green"><div class="b2b-node-label">OAuth2 Token</div><div class="b2b-node-val green"><span class="b2b-pulse green"></span>VALID</div></div>
+          <div class="b2b-node blue"><div class="b2b-node-label">Redis Cache</div><div class="b2b-node-val blue"><span class="b2b-pulse blue"></span>HIT 94%</div></div>
+          <div class="b2b-node purple"><div class="b2b-node-label">AI Inference</div><div class="b2b-node-val purple"><span class="b2b-pulse purple"></span>ONLINE</div></div>
+          <div class="b2b-node green"><div class="b2b-node-label">SLA Engine</div><div class="b2b-node-val green"><span class="b2b-pulse green"></span>MONITORING</div></div>
+        </div>
+      </div>
+    </div><!-- /console -->
+
+    <!-- ══ SMART RECORDER ══ -->
     <div id="page-recorder" class="page">
-      <div class="ph">
-        <div class="ph-left"><div class="eyebrow">Call Ops</div><div class="title"><i class="fas fa-headset"></i> Smart Recorder</div></div>
-        <div class="ph-right"><button class="btn btn-p" onclick="nav('incident',null)"><i class="fas fa-plus"></i> Open New Ticket</button></div>
-      </div>
-      <div class="rg">
-        <div>
-          <div class="card">
-            <div class="ch"><div class="ch-title"><i class="fas fa-magnifying-glass"></i> Customer / Asset Lookup</div><span style="font-size:10px;color:var(--txt2)">Real-time</span></div>
-            <div class="cb">
-              <div class="lf"><i class="fas fa-magnifying-glass"></i><input type="text" id="ri" oninput="rl()" placeholder="Name, phone, or account ID…"></div>
-              <div id="lr" class="lr">
-                <div class="rh"><i class="fas fa-building" style="color:var(--c)"></i> SALAM MOBILE<span style="margin-left:auto" class="sb s-a">Active</span></div>
-                <div class="rg2">
-                  <div><div class="rf-label">Account (AR)</div><div class="rf-val">سلام موبايل</div></div>
-                  <div><div class="rf-label">Account (EN)</div><div class="rf-val">SALAM MOBILE</div></div>
-                  <div><div class="rf-label">Site Location</div><div class="rf-val">Riyadh, HQ Tower</div></div>
-                  <div><div class="rf-label">Service ID</div><div class="rf-val" style="font-family:var(--mono)">966510528178</div></div>
-                  <div><div class="rf-label">Email</div><div class="rf-val">noc@salam.sa</div></div>
-                  <div><div class="rf-label">Contract</div><div class="rf-val">Enterprise Gold</div></div>
-                </div>
-                <div style="display:flex;gap:7px;margin-top:12px">
-                  <button class="btn btn-p" onclick="nav('incident',null)"><i class="fas fa-plus"></i> Create Incident</button>
-                  <button class="btn btn-s"><i class="fas fa-clock-rotate-left"></i> History</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="ch"><div class="ch-title"><i class="fas fa-clock-rotate-left"></i> Recent Activity</div></div>
-            <div class="cb">
-              <div class="af">
-                <div class="ai"><div class="adot r"></div><div><div class="at"><strong>INC17775</strong> SLA breached — Suspension escalated</div><div class="atm">3 min ago · Fahad Al-Malki</div></div></div>
-                <div class="ai"><div class="adot a"></div><div><div class="at"><strong>INC17778</strong> Status → <strong>Assigned</strong></div><div class="atm">18 min ago · Aseel Al-Ahmadi</div></div></div>
-                <div class="ai"><div class="adot g"></div><div><div class="at"><strong>INC17760</strong> Resolved — VPN cert renewed</div><div class="atm">2h ago · Fahad Al-Malki</div></div></div>
-                <div class="ai"><div class="adot b"></div><div><div class="at"><strong>WO00041233</strong> assigned to field team</div><div class="atm">4h ago · System</div></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class="card">
-            <div class="ch"><div class="ch-title"><i class="fas fa-bolt"></i> Quick Actions</div></div>
-            <div class="cb" style="display:flex;flex-direction:column;gap:5px">
-              <button class="qa-btn" onclick="nav('incident',null)"><i class="fas fa-triangle-exclamation"></i> Open Incident Ticket</button>
-              <button class="qa-btn"><i class="fas fa-wrench"></i> Create Work Order</button>
-              <button class="qa-btn"><i class="fas fa-star"></i> New Service Request</button>
-              <button class="qa-btn"><i class="fas fa-user-plus"></i> Register New Customer</button>
-              <button class="qa-btn"><i class="fas fa-phone"></i> Log Call Record</button>
-              <button class="qa-btn"><i class="fas fa-file-export"></i> Export Report</button>
-            </div>
-          </div>
-          <div class="card">
-            <div class="ch"><div class="ch-title"><i class="fas fa-gauge-high"></i> Live SLA Monitor</div></div>
-            <div class="cb" style="display:flex;flex-direction:column;gap:12px">
-              <div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px"><span style="color:var(--txt2)">P1 Response</span><span style="color:var(--g);font-family:var(--mono)">99.1%</span></div><div class="sbar-track"><div class="sbar-fill" style="width:99.1%;background:var(--g)"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px"><span style="color:var(--txt2)">P2 Resolution</span><span style="color:var(--a);font-family:var(--mono)">83.4%</span></div><div class="sbar-track"><div class="sbar-fill" style="width:83.4%;background:var(--a)"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px"><span style="color:var(--txt2)">Overall</span><span style="color:var(--r);font-family:var(--mono)">67.2%</span></div><div class="sbar-track"><div class="sbar-fill" style="width:67.2%;background:var(--r)"></div></div></div>
-            </div>
-          </div>
+      <div class="page-header">
+        <div class="page-title"><i class="fas fa-headset"></i> Smart Recorder</div>
+        <div class="page-actions">
+          <button class="btn btn-primary" onclick="showPage('incident',null)"><i class="fas fa-plus"></i> Open New Ticket</button>
         </div>
       </div>
-      <div class="tf"><div class="tf-title"><i class="fas fa-server"></i> B2B Core Telemetry — Live</div><div class="tg"><div class="tn g"><div class="tl">Active Directory</div><div class="tv g"><span class="tdot g"></span>CONNECTED</div></div><div class="tn b"><div class="tl">Django ORM</div><div class="tv b"><span class="tdot b"></span>POSTGRES_OK</div></div><div class="tn a"><div class="tl">LDAP Sync</div><div class="tv a"><span class="tdot a"></span>12ms lag</div></div><div class="tn g"><div class="tl">Express.js API</div><div class="tv g"><span class="tdot g"></span>ROUTING</div></div><div class="tn g"><div class="tl">OAuth2 Token</div><div class="tv g"><span class="tdot g"></span>VALID</div></div><div class="tn b"><div class="tl">Redis Cache</div><div class="tv b"><span class="tdot b"></span>HIT 94%</div></div><div class="tn p"><div class="tl">AI Inference</div><div class="tv p"><span class="tdot p"></span>ONLINE</div></div><div class="tn g"><div class="tl">SLA Engine</div><div class="tv g"><span class="tdot g"></span>MONITORING</div></div></div></div>
-    </div>
 
-    <!-- INCIDENT -->
-    <div id="page-incident" class="page">
-      <div class="ph">
-        <div class="ph-left"><div class="eyebrow">Incident Management</div><div class="title"><i class="fas fa-triangle-exclamation"></i> Modify / Open Incident</div></div>
-        <div class="ph-right">
-          <button class="btn btn-s"><i class="fas fa-clock-rotate-left"></i> History</button>
-          <button class="btn btn-p" onclick="si(event)"><i class="fas fa-floppy-disk"></i> Confirm &amp; Save</button>
+      <div class="recorder-grid">
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-header-title"><i class="fas fa-magnifying-glass"></i> Customer / Asset Lookup</div>
+              <span style="font-size:11px;color:var(--gh-muted)">Real-time search</span>
+            </div>
+            <div class="card-body">
+              <p style="font-size:12px;color:var(--gh-muted);margin-bottom:10px">
+                Search by name, phone, email, or service ID (e.g. "salam", "0540", "9665…")
+              </p>
+              <div class="lookup-field">
+                <i class="fas fa-magnifying-glass"></i>
+                <input type="text" id="recorderInput" oninput="recorderLookup()"
+                  placeholder="Customer name, phone, or account ID…">
+              </div>
+              <div id="lookupResult" class="lookup-result">
+                <div class="result-header">
+                  <i class="fas fa-building" style="color:var(--accent)"></i>
+                  Customer Account — SALAM MOBILE
+                  <span style="margin-left:auto" class="status-badge s-assigned">Active</span>
+                </div>
+                <div class="result-grid">
+                  <div class="result-field">
+                    <div class="result-field-label">Account Name (AR)</div>
+                    <div class="result-field-val">سلام موبايل</div>
+                  </div>
+                  <div class="result-field">
+                    <div class="result-field-label">Account Name (EN)</div>
+                    <div class="result-field-val">SALAM MOBILE</div>
+                  </div>
+                  <div class="result-field">
+                    <div class="result-field-label">Site Location</div>
+                    <div class="result-field-val">Riyadh, HQ Tower</div>
+                  </div>
+                  <div class="result-field">
+                    <div class="result-field-label">Service ID</div>
+                    <div class="result-field-val" style="font-family:var(--font-mono)">966510528178</div>
+                  </div>
+                  <div class="result-field">
+                    <div class="result-field-label">Email</div>
+                    <div class="result-field-val">noc@salam.sa</div>
+                  </div>
+                  <div class="result-field">
+                    <div class="result-field-label">Contract Tier</div>
+                    <div class="result-field-val">Enterprise Gold</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:14px">
+                  <button class="btn btn-primary" onclick="showPage('incident',null)"><i class="fas fa-plus"></i> Create Incident</button>
+                  <button class="btn btn-secondary"><i class="fas fa-clock-rotate-left"></i> View History</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:0">
+            <div class="card-header">
+              <div class="card-header-title"><i class="fas fa-clock-rotate-left"></i> Recent Activity</div>
+            </div>
+            <div class="card-body">
+              <div class="activity-feed">
+                <div class="activity-item">
+                  <div class="activity-dot red"></div>
+                  <div>
+                    <div class="activity-text"><strong>INC00000017775</strong> SLA breached — Temporary Suspension request escalated</div>
+                    <div class="activity-time">3 minutes ago · Fahad Al-Malki</div>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-dot yellow"></div>
+                  <div>
+                    <div class="activity-text"><strong>INC00000017778</strong> Status updated to <strong>Assigned</strong></div>
+                    <div class="activity-time">18 minutes ago · Aseel Al-Ahmadi</div>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-dot green"></div>
+                  <div>
+                    <div class="activity-text"><strong>INC00000017760</strong> Resolved — VPN cert renewed successfully</div>
+                    <div class="activity-time">2 hours ago · Fahad Al-Malki</div>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-dot blue"></div>
+                  <div>
+                    <div class="activity-text">Work Order <strong>WO00041233</strong> assigned to field team</div>
+                    <div class="activity-time">4 hours ago · System</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions Sidebar -->
+        <div>
+          <div class="card quick-actions">
+            <div class="card-header">
+              <div class="card-header-title"><i class="fas fa-bolt"></i> Quick Actions</div>
+            </div>
+            <div class="card-body">
+              <button class="quick-action-btn" onclick="showPage('incident',null)">
+                <i class="fas fa-triangle-exclamation"></i> Open Incident Ticket
+              </button>
+              <button class="quick-action-btn">
+                <i class="fas fa-wrench"></i> Create Work Order
+              </button>
+              <button class="quick-action-btn">
+                <i class="fas fa-star"></i> New Service Request
+              </button>
+              <button class="quick-action-btn">
+                <i class="fas fa-user-plus"></i> Register New Customer
+              </button>
+              <button class="quick-action-btn">
+                <i class="fas fa-phone"></i> Log Call Record
+              </button>
+              <button class="quick-action-btn">
+                <i class="fas fa-file-export"></i> Export Report
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-header-title"><i class="fas fa-gauge-high"></i> Live SLA Monitor</div>
+            </div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="font-size:12px;color:var(--gh-muted)">P1 Response SLA</span>
+                <span style="color:var(--teal);font-family:var(--font-mono);font-size:12px">99.1%</span>
+              </div>
+              <div style="background:var(--gh-canvas);border-radius:3px;height:4px;overflow:hidden">
+                <div style="width:99.1%;height:100%;background:var(--teal);border-radius:3px"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="font-size:12px;color:var(--gh-muted)">P2 Resolution SLA</span>
+                <span style="color:var(--yellow);font-family:var(--font-mono);font-size:12px">83.4%</span>
+              </div>
+              <div style="background:var(--gh-canvas);border-radius:3px;height:4px;overflow:hidden">
+                <div style="width:83.4%;height:100%;background:var(--yellow);border-radius:3px"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="font-size:12px;color:var(--gh-muted)">Overall Compliance</span>
+                <span style="color:var(--red);font-family:var(--font-mono);font-size:12px">67.2%</span>
+              </div>
+              <div style="background:var(--gh-canvas);border-radius:3px;height:4px;overflow:hidden">
+                <div style="width:67.2%;height:100%;background:var(--red);border-radius:3px"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:2fr 1fr;gap:14px">
+
+      <div class="b2b-footer">
+        <div class="b2b-footer-title"><i class="fas fa-server"></i> B2B Core Backend Telemetry — Live</div>
+        <div class="b2b-grid">
+          <div class="b2b-node green"><div class="b2b-node-label">Active Directory</div><div class="b2b-node-val green"><span class="b2b-pulse green"></span>CONNECTED</div></div>
+          <div class="b2b-node blue"><div class="b2b-node-label">Django ORM</div><div class="b2b-node-val blue"><span class="b2b-pulse blue"></span>POSTGRES_OK</div></div>
+          <div class="b2b-node yellow"><div class="b2b-node-label">LDAP Sync</div><div class="b2b-node-val yellow"><span class="b2b-pulse yellow"></span>12ms lag</div></div>
+          <div class="b2b-node green"><div class="b2b-node-label">Express.js API</div><div class="b2b-node-val green"><span class="b2b-pulse green"></span>ROUTING</div></div>
+          <div class="b2b-node green"><div class="b2b-node-label">OAuth2 Token</div><div class="b2b-node-val green"><span class="b2b-pulse green"></span>VALID</div></div>
+          <div class="b2b-node blue"><div class="b2b-node-label">Redis Cache</div><div class="b2b-node-val blue"><span class="b2b-pulse blue"></span>HIT 94%</div></div>
+          <div class="b2b-node purple"><div class="b2b-node-label">AI Inference</div><div class="b2b-node-val purple"><span class="b2b-pulse purple"></span>ONLINE</div></div>
+          <div class="b2b-node green"><div class="b2b-node-label">SLA Engine</div><div class="b2b-node-val green"><span class="b2b-pulse green"></span>MONITORING</div></div>
+        </div>
+      </div>
+    </div><!-- /recorder -->
+
+    <!-- ══ CREATE/EDIT INCIDENT ══ -->
+    <div id="page-incident" class="page">
+      <div class="page-header">
+        <div class="page-title"><i class="fas fa-triangle-exclamation"></i> Modify / Open Incident Ticket</div>
+        <div class="page-actions">
+          <button class="btn btn-secondary"><i class="fas fa-clock-rotate-left"></i> View History</button>
+          <button class="btn btn-primary" onclick="saveIncident()"><i class="fas fa-floppy-disk"></i> Confirm &amp; Save</button>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px">
         <div class="card">
-          <div class="ch"><div class="ch-title"><i class="fas fa-file-lines"></i> Incident Details</div><span style="font-family:var(--mono);font-size:10px;color:var(--txt2)">INC00000017778</span></div>
-          <div class="cb">
-            <div class="fg">
-              <div class="fgr full"><label class="fl">Summary / Title</label><input class="fc" type="text" value="Fly vish Salam issues"></div>
-              <div class="fgr"><label class="fl">Incident ID</label><input class="fc" type="text" value="INC00000017778" disabled></div>
-              <div class="fgr"><label class="fl">Impact Severity</label><select class="fc"><option>Critical / System Down</option><option selected>Major / Degraded Service</option><option>Minor / Isolated Issue</option></select></div>
-              <div class="fgr"><label class="fl">Tier 1</label><select class="fc"><option>Billing and Payment</option><option selected>Technical Support</option><option>Network Operations</option></select></div>
-              <div class="fgr"><label class="fl">Tier 2</label><select class="fc"><option selected>Internet Connectivity</option><option>SIM Card Configuration</option><option>VPN / Secure Tunnel</option></select></div>
-              <div class="fgr"><label class="fl">Assignee</label><select class="fc"><option selected>Aseel Al-Ahmadi</option><option>Fahad Al-Malki</option><option>Khalid Al-Anzi</option></select></div>
-              <div class="fgr"><label class="fl">Priority</label><select class="fc"><option>Critical</option><option>High</option><option selected>Medium</option><option>Low</option></select></div>
-              <div class="fgr full"><label class="fl">Work Notes</label><textarea class="fc" rows="5">Client reports continuous dropouts on corporate gateway node.
+          <div class="card-header">
+            <div class="card-header-title"><i class="fas fa-file-lines"></i> Incident Details</div>
+            <span style="font-size:11px;color:var(--gh-muted);font-family:var(--font-mono)">INC00000017778</span>
+          </div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="form-group full">
+                <label class="form-label">Incident Summary / Title</label>
+                <input class="form-control" type="text" value="Fly vish Salam issues">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Incident ID</label>
+                <input class="form-control" type="text" value="INC00000017778" disabled>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Impact Severity</label>
+                <select class="form-control">
+                  <option>Critical / System Down</option>
+                  <option selected>Major / Degraded Service</option>
+                  <option>Minor / Isolated Issue</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Operational Tier 1</label>
+                <select class="form-control">
+                  <option>Billing and Payment</option>
+                  <option selected>Technical Support</option>
+                  <option>Network Operations</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Operational Tier 2</label>
+                <select class="form-control">
+                  <option selected>Internet Connectivity</option>
+                  <option>SIM Card Configuration</option>
+                  <option>VPN / Secure Tunnel</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Assignee</label>
+                <select class="form-control">
+                  <option selected>Aseel Al-Ahmadi</option>
+                  <option>Fahad Al-Malki</option>
+                  <option>Khalid Al-Anzi</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Priority</label>
+                <select class="form-control">
+                  <option>Critical</option>
+                  <option>High</option>
+                  <option selected>Medium</option>
+                  <option>Low</option>
+                </select>
+              </div>
+              <div class="form-group full">
+                <label class="form-label">Work Notes / Detailed Logs</label>
+                <textarea class="form-control" rows="5">Client reports continuous dropouts on corporate gateway node.
 Affected circuit: MPLS-SAR-HQ-001
 Last stable packet: 2026-06-22 08:14 UTC
-Action taken: Escalated to NOC L2.</textarea></div>
+Action taken: Escalated to NOC L2.</textarea>
+              </div>
             </div>
           </div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:12px">
+
+        <!-- Side panel -->
+        <div style="display:flex;flex-direction:column;gap:14px">
           <div class="card">
-            <div class="ch"><div class="ch-title"><i class="fas fa-building"></i> Customer Account</div></div>
-            <div class="cb" style="font-size:12px;display:flex;flex-direction:column;gap:7px">
-              <div style="font-weight:700">SALAM MOBILE</div>
-              <div style="color:var(--txt2)">Albandari Shabab</div>
-              <div style="font-family:var(--mono);font-size:11px;color:var(--bl)">966510528178</div>
-              <hr style="border:none;border-top:1px solid var(--b1)">
-              <div><div class="rf-label">Contract</div><div class="rf-val">Enterprise Gold SLA</div></div>
-              <div><div class="rf-label">Site</div><div class="rf-val">Riyadh HQ</div></div>
+            <div class="card-header">
+              <div class="card-header-title"><i class="fas fa-building"></i> Customer Account</div>
+            </div>
+            <div class="card-body" style="font-size:13px;display:flex;flex-direction:column;gap:8px">
+              <div style="font-weight:600;color:var(--gh-text)">SALAM MOBILE</div>
+              <div style="color:var(--gh-muted)">Albandari Shabab</div>
+              <div style="font-family:var(--font-mono);font-size:12px;color:var(--blue)">966510528178</div>
+              <hr style="border:none;border-top:1px solid var(--gh-border)">
+              <div class="result-field">
+                <div class="result-field-label">Contract</div>
+                <div class="result-field-val">Enterprise Gold SLA</div>
+              </div>
+              <div class="result-field">
+                <div class="result-field-label">Site</div>
+                <div class="result-field-val">Riyadh HQ</div>
+              </div>
             </div>
           </div>
+
           <div class="card">
-            <div class="ch"><div class="ch-title"><i class="fas fa-gauge-high"></i> SLA Status</div></div>
-            <div class="cb" style="display:flex;flex-direction:column;gap:11px">
-              <div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px"><span style="color:var(--txt2)">Response SLA</span><span style="color:var(--g)">In Process</span></div><div class="sbar-track"><div class="sbar-fill" style="width:72%;background:var(--g)"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px"><span style="color:var(--txt2)">Resolution SLA</span><span style="color:var(--a)">72% consumed</span></div><div class="sbar-track"><div class="sbar-fill" style="width:72%;background:var(--a)"></div></div></div>
-              <div style="font-size:10px;color:var(--txt3)">Target: Jun 22, 2026 · Priority: Medium</div>
+            <div class="card-header">
+              <div class="card-header-title"><i class="fas fa-gauge-high"></i> SLA Status</div>
+            </div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+                  <span style="color:var(--gh-muted)">Response SLA</span>
+                  <span style="color:var(--teal)">In Process</span>
+                </div>
+                <div style="background:var(--gh-canvas);border-radius:3px;height:4px">
+                  <div style="width:72%;height:100%;background:var(--teal);border-radius:3px"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+                  <span style="color:var(--gh-muted)">Resolution SLA</span>
+                  <span style="color:var(--yellow)">72% consumed</span>
+                </div>
+                <div style="background:var(--gh-canvas);border-radius:3px;height:4px">
+                  <div style="width:72%;height:100%;background:var(--yellow);border-radius:3px"></div>
+                </div>
+              </div>
+              <div style="font-size:11px;color:var(--gh-muted);margin-top:2px">
+                Target: Jun 22, 2026 · Priority: Medium
+              </div>
             </div>
           </div>
+
           <div class="card">
-            <div class="ch"><div class="ch-title"><i class="fas fa-timeline"></i> Timeline</div></div>
-            <div class="cb">
-              <div class="af">
-                <div class="ai"><div class="adot g"></div><div><div class="at">Ticket <strong>created</strong></div><div class="atm">Jun 21 · 09:40</div></div></div>
-                <div class="ai"><div class="adot b"></div><div><div class="at"><strong>Assigned</strong> to Aseel Al-Ahmadi</div><div class="atm">Jun 21 · 10:05</div></div></div>
-                <div class="ai"><div class="adot a"></div><div><div class="at">Work note added by L1</div><div class="atm">Jun 22 · 08:22</div></div></div>
+            <div class="card-header">
+              <div class="card-header-title"><i class="fas fa-timeline"></i> Ticket Timeline</div>
+            </div>
+            <div class="card-body">
+              <div class="activity-feed">
+                <div class="activity-item">
+                  <div class="activity-dot green"></div>
+                  <div>
+                    <div class="activity-text">Ticket <strong>created</strong></div>
+                    <div class="activity-time">Jun 21, 2026 · 09:40</div>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-dot blue"></div>
+                  <div>
+                    <div class="activity-text"><strong>Assigned</strong> to Aseel Al-Ahmadi</div>
+                    <div class="activity-time">Jun 21, 2026 · 10:05</div>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-dot yellow"></div>
+                  <div>
+                    <div class="activity-text">Work note added by L1</div>
+                    <div class="activity-time">Jun 22, 2026 · 08:22</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="tf" style="margin-top:14px"><div class="tf-title"><i class="fas fa-server"></i> B2B Core Telemetry — Live</div><div class="tg"><div class="tn g"><div class="tl">Active Directory</div><div class="tv g"><span class="tdot g"></span>CONNECTED</div></div><div class="tn b"><div class="tl">Django ORM</div><div class="tv b"><span class="tdot b"></span>POSTGRES_OK</div></div><div class="tn a"><div class="tl">LDAP Sync</div><div class="tv a"><span class="tdot a"></span>12ms lag</div></div><div class="tn g"><div class="tl">Express.js API</div><div class="tv g"><span class="tdot g"></span>ROUTING</div></div><div class="tn g"><div class="tl">OAuth2 Token</div><div class="tv g"><span class="tdot g"></span>VALID</div></div><div class="tn b"><div class="tl">Redis Cache</div><div class="tv b"><span class="tdot b"></span>HIT 94%</div></div><div class="tn p"><div class="tl">AI Inference</div><div class="tv p"><span class="tdot p"></span>ONLINE</div></div><div class="tn g"><div class="tl">SLA Engine</div><div class="tv g"><span class="tdot g"></span>MONITORING</div></div></div></div>
-    </div>
 
-    <!-- REPORTS -->
-    <div id="page-reports" class="page">
-      <div class="ph">
-        <div class="ph-left"><div class="eyebrow">Analytics</div><div class="title"><i class="fas fa-chart-bar"></i> Reports &amp; Analytics</div></div>
-        <div class="ph-right">
-          <button class="btn btn-s"><i class="fas fa-file-export"></i> Export CSV</button>
-          <button class="btn btn-s"><i class="fas fa-print"></i> Print</button>
+      <div class="b2b-footer" style="margin-top:16px">
+        <div class="b2b-footer-title"><i class="fas fa-server"></i> B2B Core Backend Telemetry — Live</div>
+        <div class="b2b-grid">
+          <div class="b2b-node green"><div class="b2b-node-label">Active Directory</div><div class="b2b-node-val green"><span class="b2b-pulse green"></span>CONNECTED</div></div>
+          <div class="b2b-node blue"><div class="b2b-node-label">Django ORM</div><div class="b2b-node-val blue"><span class="b2b-pulse blue"></span>POSTGRES_OK</div></div>
+          <div class="b2b-node yellow"><div class="b2b-node-label">LDAP Sync</div><div class="b2b-node-val yellow"><span class="b2b-pulse yellow"></span>12ms lag</div></div>
+          <div class="b2b-node green"><div class="b2b-node-label">Express.js API</div><div class="b2b-node-val green"><span class="b2b-pulse green"></span>ROUTING</div></div>
+          <div class="b2b-node green"><div class="b2b-node-label">OAuth2 Token</div><div class="b2b-node-val green"><span class="b2b-pulse green"></span>VALID</div></div>
+          <div class="b2b-node blue"><div class="b2b-node-label">Redis Cache</div><div class="b2b-node-val blue"><span class="b2b-pulse blue"></span>HIT 94%</div></div>
+          <div class="b2b-node purple"><div class="b2b-node-label">AI Inference</div><div class="b2b-node-val purple"><span class="b2b-pulse purple"></span>ONLINE</div></div>
+          <div class="b2b-node green"><div class="b2b-node-label">SLA Engine</div><div class="b2b-node-val green"><span class="b2b-pulse green"></span>MONITORING</div></div>
         </div>
       </div>
-      <div class="kg">
-        <div class="kc g"><i class="fas fa-circle-check ki" style="color:var(--g)"></i><div class="kn" style="color:var(--g)">90.89%</div><div class="kd">On-Time Completion</div></div>
-        <div class="kc r"><i class="fas fa-triangle-exclamation ki" style="color:var(--r)"></i><div class="kn" style="color:var(--r)">2</div><div class="kd">Active SLA Breaches</div></div>
-        <div class="kc b"><i class="fas fa-ticket ki" style="color:var(--bl)"></i><div class="kn" style="color:var(--bl)">5</div><div class="kd">Open Incidents</div></div>
-        <div class="kc a"><i class="fas fa-clock ki" style="color:var(--a)"></i><div class="kn" style="color:var(--a)">44.28%</div><div class="kd">First-Call Resolution</div></div>
+    </div><!-- /incident -->
+
+    <!-- ══ REPORTS ══ -->
+    <div id="page-reports" class="page">
+      <div class="page-header">
+        <div class="page-title"><i class="fas fa-chart-bar"></i> Reports &amp; Analytics</div>
+        <div class="page-actions">
+          <button class="btn btn-secondary"><i class="fas fa-file-export"></i> Export CSV</button>
+          <button class="btn btn-secondary"><i class="fas fa-print"></i> Print</button>
+        </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
-        <div class="card"><div class="ch"><div class="ch-title"><i class="fas fa-chart-line"></i> Incident Trend (6 Months)</div></div><div class="cb"><canvas id="rch1" height="130"></canvas></div></div>
-        <div class="card"><div class="ch"><div class="ch-title"><i class="fas fa-chart-pie"></i> Incidents by Priority</div></div><div class="cb"><canvas id="rch2" height="130"></canvas></div></div>
+
+      <div class="report-kpi-grid">
+        <div class="kpi-card green">
+          <i class="fas fa-circle-check kpi-icon" style="color:var(--teal)"></i>
+          <div class="kpi-num" style="color:var(--teal)">90.89%</div>
+          <div class="kpi-desc">Overall On-Time Completion</div>
+        </div>
+        <div class="kpi-card red">
+          <i class="fas fa-triangle-exclamation kpi-icon" style="color:var(--red)"></i>
+          <div class="kpi-num" style="color:var(--red)">2</div>
+          <div class="kpi-desc">Active SLA Breaches</div>
+        </div>
+        <div class="kpi-card blue">
+          <i class="fas fa-ticket kpi-icon" style="color:var(--blue)"></i>
+          <div class="kpi-num" style="color:var(--blue)">5</div>
+          <div class="kpi-desc">Open Incidents</div>
+        </div>
+        <div class="kpi-card yellow">
+          <i class="fas fa-clock kpi-icon" style="color:var(--yellow)"></i>
+          <div class="kpi-num" style="color:var(--yellow)">44.28%</div>
+          <div class="kpi-desc">First-Call Resolution Rate</div>
+        </div>
       </div>
-      <div class="card"><div class="ch"><div class="ch-title"><i class="fas fa-users"></i> Assignee Performance</div></div><div class="cb"><canvas id="rch3" height="90"></canvas></div></div>
-      <div class="tf" style="margin-top:14px"><div class="tf-title"><i class="fas fa-server"></i> B2B Core Telemetry — Live</div><div class="tg"><div class="tn g"><div class="tl">Active Directory</div><div class="tv g"><span class="tdot g"></span>CONNECTED</div></div><div class="tn b"><div class="tl">Django ORM</div><div class="tv b"><span class="tdot b"></span>POSTGRES_OK</div></div><div class="tn a"><div class="tl">LDAP Sync</div><div class="tv a"><span class="tdot a"></span>12ms lag</div></div><div class="tn g"><div class="tl">Express.js API</div><div class="tv g"><span class="tdot g"></span>ROUTING</div></div><div class="tn g"><div class="tl">OAuth2 Token</div><div class="tv g"><span class="tdot g"></span>VALID</div></div><div class="tn b"><div class="tl">Redis Cache</div><div class="tv b"><span class="tdot b"></span>HIT 94%</div></div><div class="tn p"><div class="tl">AI Inference</div><div class="tv p"><span class="tdot p"></span>ONLINE</div></div><div class="tn g"><div class="tl">SLA Engine</div><div class="tv g"><span class="tdot g"></span>MONITORING</div></div></div></div>
-    </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-title"><i class="fas fa-chart-line"></i> Incident Trend (6 Months)</div>
+          </div>
+          <div class="card-body"><canvas id="reportTrend" height="140"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-title"><i class="fas fa-chart-pie"></i> Incidents by Priority</div>
+          </div>
+          <div class="card-body"><canvas id="reportPie" height="140"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-title"><i class="fas fa-users"></i> Assignee Performance</div>
+        </div>
+        <div class="card-body"><canvas id="reportAssignee" height="100"></canvas></div>
+      </div>
+
+      <div class="b2b-footer" style="margin-top:16px">
+        <div class="b2b-footer-title"><i class="fas fa-server"></i> B2B Core Backend Telemetry — Live</div>
+        <div class="b2b-grid">
+          <div class="b2b-node green"><div class="b2b-node-label">Active Directory</div><div class="b2b-node-val green"><span class="b2b-pulse green"></span>CONNECTED</div></div>
+          <div class="b2b-node blue"><div class="b2b-node-label">Django ORM</div><div class="b2b-node-val blue"><span class="b2b-pulse blue"></span>POSTGRES_OK</div></div>
+          <div class="b2b-node yellow"><div class="b2b-node-label">LDAP Sync</div><div class="b2b-node-val yellow"><span class="b2b-pulse yellow"></span>12ms lag</div></div>
+          <div class="b2b-node green"><div class="b2b-node-label">Express.js API</div><div class="b2b-node-val green"><span class="b2b-pulse green"></span>ROUTING</div></div>
+          <div class="b2b-node green"><div class="b2b-node-label">OAuth2 Token</div><div class="b2b-node-val green"><span class="b2b-pulse green"></span>VALID</div></div>
+          <div class="b2b-node blue"><div class="b2b-node-label">Redis Cache</div><div class="b2b-node-val blue"><span class="b2b-pulse blue"></span>HIT 94%</div></div>
+          <div class="b2b-node purple"><div class="b2b-node-label">AI Inference</div><div class="b2b-node-val purple"><span class="b2b-pulse purple"></span>ONLINE</div></div>
+          <div class="b2b-node green"><div class="b2b-node-label">SLA Engine</div><div class="b2b-node-val green"><span class="b2b-pulse green"></span>MONITORING</div></div>
+        </div>
+      </div>
+    </div><!-- /reports -->
 
   </main>
-</div><!-- /body -->
-</div><!-- /shell -->
+</div><!-- /app-body -->
 
 <script>
-// Clock
-function tick(){
-  const n=new Date();
-  document.getElementById('ct').textContent=n.toLocaleTimeString('en-US',{hour12:false});
-  document.getElementById('cd').textContent=n.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-}
-tick();setInterval(tick,1000);
-
-// Nav
-function nav(id,el){
+// ── PAGE NAVIGATION ──
+function showPage(id, el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
-  document.querySelectorAll('.si').forEach(n=>n.classList.remove('active'));
-  if(el)el.classList.add('active');
+  document.querySelectorAll('.gh-nav-item').forEach(n=>n.classList.remove('active'));
+  if(el) el.classList.add('active');
 }
 
-// Search
-function ft(){
-  const q=document.getElementById('ts').value.toLowerCase();
-  let c=0;
-  document.querySelectorAll('#tb2 tr').forEach(r=>{
-    const s=r.textContent.toLowerCase().includes(q);
-    r.style.display=s?'':'none';
-    if(s)c++;
+// ── SMART RECORDER LOOKUP ──
+function recorderLookup(){
+  const v=document.getElementById('recorderInput').value.toLowerCase();
+  const box=document.getElementById('lookupResult');
+  box.style.display=v.length>2?'block':'none';
+}
+
+// ── TICKET SEARCH ──
+function filterTable(){
+  const q=document.getElementById('ticketSearch').value.toLowerCase();
+  const rows=document.querySelectorAll('#ticketBody tr');
+  let count=0;
+  rows.forEach(r=>{
+    const show=r.textContent.toLowerCase().includes(q);
+    r.style.display=show?'':'none';
+    if(show)count++;
   });
-  document.getElementById('rc').textContent=c;
+  document.getElementById('rowCount').textContent=count;
 }
 
-// Recorder lookup
-function rl(){
-  const v=document.getElementById('ri').value;
-  document.getElementById('lr').style.display=v.length>2?'block':'none';
-}
-
-// Toggle
-function tog(btn){
-  btn.closest('.tog').querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
+// ── TOGGLE RANGE ──
+function toggleRange(btn,range){
+  btn.closest('.toggle-group').querySelectorAll('.toggle-btn')
+    .forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
 }
 
-// Save
-function si(e){
-  const btn=e.target;const orig=btn.innerHTML;
-  btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…';btn.disabled=true;
+// ── SAVE INCIDENT ──
+function saveIncident(){
+  const btn=event.target;
+  btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…';
+  btn.disabled=true;
   setTimeout(()=>{
-    btn.innerHTML='<i class="fas fa-circle-check"></i> Saved';
-    btn.style.cssText='background:rgba(0,200,150,.12);border-color:rgba(0,200,150,.4);color:var(--g)';
-    setTimeout(()=>{btn.innerHTML=orig;btn.style.cssText='';btn.disabled=false},2000);
-  },800);
+    btn.innerHTML='<i class="fas fa-circle-check"></i> Saved!';
+    btn.style.background='var(--teal)';
+    setTimeout(()=>{
+      btn.innerHTML='<i class="fas fa-floppy-disk"></i> Confirm & Save';
+      btn.style.background='';
+      btn.disabled=false;
+    },2000);
+  },900);
 }
 
-// Charts
-Chart.defaults.color='#3a5068';
-Chart.defaults.font.family="'JetBrains Mono',monospace";
-Chart.defaults.font.size=10;
-
-const gc='rgba(255,255,255,0.04)';
-const bc='rgba(255,255,255,0.07)';
-const base={
-  responsive:true,maintainAspectRatio:false,
+// ── CHART DEFAULTS ──
+const C={
+  responsive:true,
+  maintainAspectRatio:false,
   plugins:{legend:{display:false}},
   scales:{
-    x:{ticks:{color:'#3a5068',maxRotation:0},grid:{color:gc},border:{color:bc}},
-    y:{ticks:{color:'#3a5068'},grid:{color:gc},border:{color:bc}}
+    x:{ticks:{color:'#6e7681',font:{size:11}},grid:{color:'#21262d'},border:{color:'#30363d'}},
+    y:{ticks:{color:'#6e7681',font:{size:11}},grid:{color:'#21262d'},border:{color:'#30363d'}}
   }
 };
 
-new Chart('ch1',{type:'line',data:{
-  labels:['Dec','Jan','Feb','Mar','Apr','May','Jun'],
-  datasets:[
-    {label:'All',data:[2160,1850,1200,950,700,450,190],borderColor:'#4080ff',backgroundColor:'rgba(64,128,255,0.05)',fill:true,tension:.4,pointRadius:2,pointBackgroundColor:'#4080ff'},
-    {label:'Critical',data:[310,280,210,160,90,60,22],borderColor:'#ff4060',backgroundColor:'rgba(255,64,96,0.04)',fill:true,tension:.4,pointRadius:2,pointBackgroundColor:'#ff4060'}
-  ]},{options:{...base,plugins:{legend:{display:true,labels:{color:'#7a94b0',boxWidth:7,padding:10}}}}}});
+// INCIDENT BACKLOG
+new Chart(document.getElementById('incidentBacklog'),{type:'line',
+  data:{
+    labels:['Dec 24','Jan 15','Feb 2','Mar 1','Apr 1','May 1','Jun 21'],
+    datasets:[
+      {label:'All',data:[2160,1850,1200,950,700,450,190],
+        borderColor:'#388bfd',backgroundColor:'rgba(56,139,253,.08)',
+        fill:true,tension:.4,pointRadius:3,pointBackgroundColor:'#388bfd'},
+      {label:'Critical',data:[310,280,210,160,90,60,22],
+        borderColor:'#da3633',backgroundColor:'rgba(218,54,51,.05)',
+        fill:true,tension:.4,pointRadius:3,pointBackgroundColor:'#da3633'}
+    ]
+  },
+  options:{...C,plugins:{legend:{display:true,labels:{color:'#8b949e',font:{size:11},
+    boxWidth:10,padding:12}}}}
+});
 
-new Chart('ch2',{type:'bar',data:{
-  labels:['Assigned','In Progress','Pending'],
-  datasets:[
-    {label:'Critical',data:[12,5,3],backgroundColor:'#ff4060'},
-    {label:'High',data:[45,22,15],backgroundColor:'#f97316'},
-    {label:'Medium',data:[180,90,60],backgroundColor:'#f0a500'},
-    {label:'Low',data:[288,120,80],backgroundColor:'#00c896'}
-  ]},{options:{...base,scales:{...base.scales,x:{...base.scales.x,stacked:true},y:{...base.scales.y,stacked:true}},plugins:{legend:{display:true,labels:{color:'#7a94b0',boxWidth:7,padding:10}}}}}});
+// OPEN INCIDENTS (stacked bar)
+new Chart(document.getElementById('incidentOpen'),{type:'bar',
+  data:{
+    labels:['Assigned','In Progress','Pending'],
+    datasets:[
+      {label:'Critical',data:[12,5,3],backgroundColor:'#da3633'},
+      {label:'High',data:[45,22,15],backgroundColor:'#f0883e'},
+      {label:'Medium',data:[180,90,60],backgroundColor:'#d29922'},
+      {label:'Low',data:[288,120,80],backgroundColor:'#3fb950'}
+    ]
+  },
+  options:{...C,scales:{...C.scales,x:{...C.scales.x,stacked:true},y:{...C.scales.y,stacked:true}},
+    plugins:{legend:{display:true,labels:{color:'#8b949e',font:{size:11},boxWidth:10,padding:12}}}}
+});
 
-new Chart('ch3',{type:'line',data:{
-  labels:['May 23','May 26','Jun 3','Jun 9','Jun 15','Jun 21'],
-  datasets:[{data:[8537,7200,6000,5500,6200,5800],borderColor:'#4080ff',backgroundColor:'rgba(64,128,255,0.05)',fill:true,tension:.3,pointRadius:2,pointBackgroundColor:'#4080ff'}]
-},options:base});
+// WORK ORDER BACKLOG
+new Chart(document.getElementById('woBacklog'),{type:'line',
+  data:{
+    labels:['May 23','May 26','Jun 3','Jun 9','Jun 15','Jun 21'],
+    datasets:[{label:'All',data:[8537,7200,6000,5500,6200,5800],
+      borderColor:'#388bfd',backgroundColor:'rgba(56,139,253,.08)',
+      fill:true,tension:.3,pointRadius:3,pointBackgroundColor:'#388bfd'}]
+  },
+  options:C
+});
 
-new Chart('ch4',{type:'bar',data:{
-  labels:['Assigned','Pending','Waiting','Planning','In Prog'],
-  datasets:[
-    {label:'Critical',data:[5,2,1,1,3],backgroundColor:'#ff4060'},
-    {label:'High',data:[30,15,8,5,20],backgroundColor:'#f97316'},
-    {label:'Medium',data:[120,80,40,25,80],backgroundColor:'#f0a500'},
-    {label:'Low',data:[480,300,150,80,280],backgroundColor:'#00c896'}
-  ]},options:{...base,scales:{...base.scales,x:{...base.scales.x,stacked:true},y:{...base.scales.y,stacked:true}},plugins:{legend:{display:true,labels:{color:'#7a94b0',boxWidth:7,padding:10}}}}});
+// OPEN WORK ORDERS (stacked)
+new Chart(document.getElementById('woOpen'),{type:'bar',
+  data:{
+    labels:['Assigned','Pending','Waiting Approval','Planning','In Progress'],
+    datasets:[
+      {label:'Critical',data:[5,2,1,1,3],backgroundColor:'#da3633'},
+      {label:'High',data:[30,15,8,5,20],backgroundColor:'#f0883e'},
+      {label:'Medium',data:[120,80,40,25,80],backgroundColor:'#d29922'},
+      {label:'Low',data:[480,300,150,80,280],backgroundColor:'#3fb950'}
+    ]
+  },
+  options:{...C,scales:{...C.scales,x:{...C.scales.x,stacked:true},y:{...C.scales.y,stacked:true}},
+    plugins:{legend:{display:true,labels:{color:'#8b949e',font:{size:11},boxWidth:10,padding:12}}}}
+});
 
-new Chart('ch5',{type:'line',data:{
-  labels:['Dec','Feb','Apr','Jun'],
-  datasets:[{data:[2,5,8,16],borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,0.06)',fill:true,tension:.4,pointRadius:3,pointBackgroundColor:'#8b5cf6'}]
-},options:base});
+// SERVICE REQUEST BACKLOG
+new Chart(document.getElementById('srBacklog'),{type:'line',
+  data:{
+    labels:['Dec 24','Feb 2','Apr 1','Jun 21'],
+    datasets:[{label:'Requests',data:[2,5,8,16],
+      borderColor:'#8957e5',backgroundColor:'rgba(137,87,229,.08)',
+      fill:true,tension:.4,pointRadius:4,pointBackgroundColor:'#8957e5'}]
+  },
+  options:C
+});
 
-new Chart('ch6',{type:'bar',data:{
-  labels:['Cart','Submit','Review','Pending','Wait','Init','In Prog'],
-  datasets:[
-    {label:'Critical',data:[0,1,0,0,0,0,1],backgroundColor:'#ff4060'},
-    {label:'High',data:[1,2,1,1,0,0,2],backgroundColor:'#f97316'},
-    {label:'Medium',data:[1,3,2,1,1,1,1],backgroundColor:'#f0a500'},
-    {label:'Low',data:[0,0,1,0,0,0,0],backgroundColor:'#00c896'}
-  ]},options:{...base,scales:{...base.scales,x:{...base.scales.x,stacked:true},y:{...base.scales.y,stacked:true}},plugins:{legend:{display:true,labels:{color:'#7a94b0',boxWidth:7,padding:10}}}}});
+// SERVICE REQUEST OPEN
+new Chart(document.getElementById('srOpen'),{type:'bar',
+  data:{
+    labels:['In Cart','Submitted','In Review','Pending','Waiting Approval','Initiated','In Progress'],
+    datasets:[
+      {label:'Critical',data:[0,1,0,0,0,0,1],backgroundColor:'#da3633'},
+      {label:'High',data:[1,2,1,1,0,0,2],backgroundColor:'#f0883e'},
+      {label:'Medium',data:[1,3,2,1,1,1,1],backgroundColor:'#d29922'},
+      {label:'Low',data:[0,0,1,0,0,0,0],backgroundColor:'#3fb950'}
+    ]
+  },
+  options:{...C,scales:{...C.scales,x:{...C.scales.x,stacked:true},y:{...C.scales.y,stacked:true}},
+    plugins:{legend:{display:true,labels:{color:'#8b949e',font:{size:11},boxWidth:10,padding:12}}}}
+});
 
-new Chart('rch1',{type:'line',data:{
-  labels:['Jan','Feb','Mar','Apr','May','Jun'],
-  datasets:[
-    {label:'Opened',data:[410,390,500,320,280,190],borderColor:'#ff4060',backgroundColor:'rgba(255,64,96,.04)',fill:true,tension:.4},
-    {label:'Resolved',data:[380,400,460,310,290,185],borderColor:'#00c896',backgroundColor:'rgba(0,200,150,.04)',fill:true,tension:.4}
-  ]},options:{...base,plugins:{legend:{display:true,labels:{color:'#7a94b0',boxWidth:7,padding:10}}}}});
+// REPORT TREND
+new Chart(document.getElementById('reportTrend'),{type:'line',
+  data:{
+    labels:['Jan','Feb','Mar','Apr','May','Jun'],
+    datasets:[
+      {label:'Opened',data:[410,390,500,320,280,190],
+        borderColor:'#da3633',backgroundColor:'rgba(218,54,51,.06)',fill:true,tension:.4},
+      {label:'Resolved',data:[380,400,460,310,290,185],
+        borderColor:'#3fb950',backgroundColor:'rgba(63,185,80,.06)',fill:true,tension:.4}
+    ]
+  },
+  options:{...C,plugins:{legend:{display:true,labels:{color:'#8b949e',font:{size:11},
+    boxWidth:10,padding:12}}}}
+});
 
-new Chart('rch2',{type:'doughnut',data:{
-  labels:['Critical','High','Medium','Low'],
-  datasets:[{data:[12,45,180,288],backgroundColor:['#ff4060','#f97316','#f0a500','#00c896'],borderColor:'#0b0f17',borderWidth:3}]
-},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:true,position:'right',labels:{color:'#7a94b0',boxWidth:8,padding:12}}}}});
+// REPORT PIE
+new Chart(document.getElementById('reportPie'),{type:'doughnut',
+  data:{
+    labels:['Critical','High','Medium','Low'],
+    datasets:[{data:[12,45,180,288],
+      backgroundColor:['#da3633','#f0883e','#d29922','#3fb950'],
+      borderColor:'#161b22',borderWidth:2}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:true,position:'right',
+      labels:{color:'#8b949e',font:{size:11},padding:14}}}}
+});
 
-new Chart('rch3',{type:'bar',data:{
-  labels:['Aseel Al-Ahmadi','Fahad Al-Malki','Khalid Al-Anzi'],
-  datasets:[
-    {label:'Resolved',data:[48,62,35],backgroundColor:'#00c896'},
-    {label:'In Progress',data:[12,8,15],backgroundColor:'#4080ff'},
-    {label:'Breached',data:[1,2,0],backgroundColor:'#ff4060'}
-  ]},options:{...base,indexAxis:'y',plugins:{legend:{display:true,labels:{color:'#7a94b0',boxWidth:7,padding:10}}}}});
+// ASSIGNEE PERFORMANCE
+new Chart(document.getElementById('reportAssignee'),{type:'bar',
+  data:{
+    labels:['Aseel Al-Ahmadi','Fahad Al-Malki','Khalid Al-Anzi'],
+    datasets:[
+      {label:'Resolved',data:[48,62,35],backgroundColor:'#3fb950'},
+      {label:'In Progress',data:[12,8,15],backgroundColor:'#388bfd'},
+      {label:'Breached',data:[1,2,0],backgroundColor:'#da3633'}
+    ]
+  },
+  options:{...C,indexAxis:'y',
+    plugins:{legend:{display:true,labels:{color:'#8b949e',font:{size:11},boxWidth:10,padding:12}}}}
+});
 </script>
 </body>
-</html>
+  </html>
