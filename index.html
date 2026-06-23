@@ -1356,6 +1356,294 @@ Target: Jun 22, 2026 · Priority: Medium
 <!-- ══ CUSTOMER SERVICE DETAILS ══ -->
 <div id="page-services" class="page">
 <div class="page-header">
+<div class="page-title"><i class="fas fa-layer-group"></i> Service Order Management - Call Center</div>
+<div class="page-actions">
+<button class="btn btn-secondary"><i class="fas fa-refresh"></i> Refresh</button>
+<button class="btn btn-primary"><i class="fas fa-file-export"></i> Export</button>
+</div>
+</div>
+
+<!-- SEARCH SECTION -->
+<div class="card" style="margin-bottom:14px">
+<div class="card-body" style="padding:12px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:10px">
+<div>
+<label class="form-label" style="margin-bottom:4px">Order Number</label>
+<input class="form-control" type="text" placeholder="1068654" id="orderNum" style="font-size:11px">
+</div>
+<div>
+<label class="form-label" style="margin-bottom:4px">Service ID</label>
+<input class="form-control" type="text" placeholder="1068654" id="serviceNum" style="font-size:11px">
+</div>
+<div>
+<label class="form-label" style="margin-bottom:4px">Customer Name</label>
+<input class="form-control" type="text" placeholder="Digital Technology Co. Ltd" id="custName" style="font-size:11px">
+</div>
+<div>
+<label class="form-label" style="margin-bottom:4px">Order Date</label>
+<input class="form-control" type="text" placeholder="12-MAY-2015" id="orderDate" style="font-size:11px">
+</div>
+<div style="display:flex;align-items:flex-end;gap:6px">
+<button class="btn btn-primary" style="flex:1;font-size:11px" onclick="loadServiceOrder()"><i class="fas fa-search"></i> Search</button>
+<button class="btn btn-secondary" style="padding:5px 8px" onclick="clearServiceSearch()"><i class="fas fa-xmark"></i></button>
+</div>
+</div>
+</div>
+
+<!-- ORDER HEADER -->
+<div class="card" style="margin-bottom:14px;background:var(--gh-overlay)">
+<div class="card-body" style="padding:10px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:10px;border-bottom:2px solid var(--gh-border)">
+<div style="border-right:1px solid var(--gh-border);padding-right:10px">
+<div style="font-size:10px;color:var(--gh-muted);text-transform:uppercase">Order Number</div>
+<div style="font-weight:700;color:var(--blue);font-size:12px">1068654</div>
+</div>
+<div style="border-right:1px solid var(--gh-border);padding-right:10px">
+<div style="font-size:10px;color:var(--gh-muted);text-transform:uppercase">Service ID</div>
+<div style="font-weight:700;color:var(--gh-text);font-size:12px">1068654</div>
+</div>
+<div style="border-right:1px solid var(--gh-border);padding-right:10px">
+<div style="font-size:10px;color:var(--gh-muted);text-transform:uppercase">Customer Name</div>
+<div style="font-weight:700;color:var(--gh-text);font-size:12px">Digital Technology Co. Ltd (Reseller)</div>
+</div>
+<div style="border-right:1px solid var(--gh-border);padding-right:10px">
+<div style="font-size:10px;color:var(--gh-muted);text-transform:uppercase">Order Date</div>
+<div style="font-weight:700;color:var(--gh-text);font-size:12px">12-MAY-2015</div>
+</div>
+<div>
+<div style="font-size:10px;color:var(--gh-muted);text-transform:uppercase">Service Status</div>
+<div style="font-weight:700;color:var(--red);font-size:12px">Terminated</div>
+</div>
+</div>
+</div>
+
+<!-- SERVICES TABLE -->
+<div class="card" style="margin-bottom:14px">
+<div class="card-header" style="background:var(--gh-overlay);padding:10px;border-bottom:1px solid var(--gh-border)">
+<div style="font-size:11px;font-weight:700;color:var(--gh-text);text-transform:uppercase">Line OM | Service Type | Period | Media 1 | Media 2 | Speed | City 1 | Address 1 | City 2 | Address 2</div>
+</div>
+<div class="card-body" style="padding:0">
+<div class="gh-table-wrap" style="max-height:150px;overflow-y:auto">
+<table style="width:100%;border-collapse:collapse;font-size:11px">
+<tbody>
+<tr style="border-bottom:1px solid var(--gh-border)">
+<td style="padding:8px;border-right:1px solid var(--gh-border);color:var(--gh-muted);text-align:center">1</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);color:var(--gh-text)">ZoomComp</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);text-align:center">30</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);color:var(--gh-text)">ADSL</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border)">—</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);text-align:center;font-weight:600;color:var(--blue)">512</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);color:var(--gh-text)">Riyadh</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);font-size:10px;color:var(--gh-muted)">Yamamah comp. Ed 15 6179</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);color:var(--gh-text)">Riyadh</td>
+<td style="padding:8px;color:var(--gh-muted);font-size:10px">AL-Yamama 2 Eft 15 6156 Cen</td>
+</tr>
+<tr style="border-bottom:1px solid var(--gh-border)">
+<td style="padding:8px;border-right:1px solid var(--gh-border);color:var(--gh-muted);text-align:center">1</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);color:var(--gh-text)">ZoomComp</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);text-align:center">90</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);color:var(--gh-text)">—</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border)">—</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);text-align:center;font-weight:600;color:var(--blue)">1024</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);color:var(--gh-text)">Riyadh</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);font-size:10px;color:var(--gh-muted)">—</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);color:var(--gh-text)">Riyadh</td>
+<td style="padding:8px;color:var(--gh-muted);font-size:10px">—</td>
+</tr>
+<tr>
+<td style="padding:8px;border-right:1px solid var(--gh-border);color:var(--gh-muted);text-align:center">1</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);color:var(--gh-text)">BDI - 12 Months Microwave</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);text-align:center">—</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);color:var(--gh-text)">Microwave</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border)">—</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);text-align:center;font-weight:600;color:var(--blue)">2Mbps</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);color:var(--gh-text)">Riyadh</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);font-size:10px;color:var(--gh-muted)">Mihraly Suly 2 relocation 1 3330</td>
+<td style="padding:8px;border-right:1px solid var(--gh-border);color:var(--gh-text)">—</td>
+<td style="padding:8px;color:var(--gh-muted);font-size:10px">—</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- TABS (ZOOOM, BRI, Metro Ethernet, etc) -->
+<div style="display:flex;gap:0;margin-bottom:14px;background:var(--gh-surface);border:1px solid var(--gh-border);border-radius:0;overflow-x:auto">
+<button class="btn" style="flex:0 0 auto;border:none;border-right:1px solid var(--gh-border);border-radius:0;background:var(--gh-overlay);padding:8px 14px;font-size:11px;color:var(--gh-text);font-weight:600;cursor:pointer">ZOOOM</button>
+<button class="btn" style="flex:0 0 auto;border:none;border-right:1px solid var(--gh-border);border-radius:0;background:var(--gh-canvas);padding:8px 14px;font-size:11px;color:var(--gh-muted);cursor:pointer">BRI</button>
+<button class="btn" style="flex:0 0 auto;border:none;border-right:1px solid var(--gh-border);border-radius:0;background:var(--gh-canvas);padding:8px 14px;font-size:11px;color:var(--gh-muted);cursor:pointer">Metro Ethernet</button>
+<button class="btn" style="flex:0 0 auto;border:none;border-right:1px solid var(--gh-border);border-radius:0;background:var(--gh-canvas);padding:8px 14px;font-size:11px;color:var(--gh-muted);cursor:pointer">L3 VPN +</button>
+<button class="btn" style="flex:0 0 auto;border:none;border-right:1px solid var(--gh-border);border-radius:0;background:var(--gh-canvas);padding:8px 14px;font-size:11px;color:var(--gh-muted);cursor:pointer">BRI</button>
+<button class="btn" style="flex:0 0 auto;border:none;border-right:1px solid var(--gh-border);border-radius:0;background:var(--gh-canvas);padding:8px 14px;font-size:11px;color:var(--gh-muted);cursor:pointer">VSAT</button>
+<button class="btn" style="flex:0 0 auto;border:none;border-right:1px solid var(--gh-border);border-radius:0;background:var(--gh-canvas);padding:8px 14px;font-size:11px;color:var(--gh-muted);cursor:pointer">CO-LOC Bus. Continuity</button>
+<button class="btn" style="flex:0 0 auto;border:none;border-radius:0;background:var(--gh-canvas);padding:8px 14px;font-size:11px;color:var(--gh-muted);cursor:pointer">Managed Router</button>
+</div>
+
+<!-- EQUIPMENT DETAILS SECTION -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+<!-- LEFT PANEL -->
+<div class="card">
+<div class="card-body" style="padding:12px">
+<div style="margin-bottom:10px">
+<label class="form-label">B/s & Sc</label>
+<input class="form-control" type="text" style="font-size:11px" placeholder="Enter value">
+</div>
+<div style="margin-bottom:10px;display:flex;gap:8px">
+<select class="form-control" style="flex:1;font-size:11px">
+<option>Sc</option>
+</select>
+<button class="btn btn-secondary" style="font-size:10px;padding:4px 8px">All Eq</button>
+</div>
+<div style="margin-bottom:10px">
+<label class="form-label">STIO MAC</label>
+<input class="form-control" type="text" style="font-size:11px" placeholder="Enter MAC">
+</div>
+<div style="margin-bottom:10px">
+<label class="form-label">CPE MAC</label>
+<input class="form-control" type="text" style="font-size:11px" placeholder="Enter MAC">
+</div>
+<div style="margin-bottom:10px">
+<label class="form-label">Modulation</label>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+<select class="form-control" style="font-size:11px">
+<option>DOWNLINK</option>
+</select>
+<select class="form-control" style="font-size:11px">
+<option>UPLINK</option>
+</select>
+</div>
+</div>
+<div>
+<label class="form-label">Vlan</label>
+<input class="form-control" type="text" style="font-size:11px" placeholder="Enter VLAN">
+</div>
+</div>
+</div>
+
+<!-- RIGHT PANEL - EQUIPMENT DETAILS -->
+<div class="card">
+<div class="card-header" style="padding:10px">
+<div style="font-size:11px;font-weight:700;text-transform:uppercase">Equipment Details</div>
+</div>
+<div class="card-body" style="padding:12px">
+<div style="margin-bottom:10px">
+<label class="form-label">OLT Name</label>
+<input class="form-control" type="text" style="font-size:11px">
+</div>
+<div style="margin-bottom:10px">
+<label class="form-label">OLT Port</label>
+<input class="form-control" type="text" style="font-size:11px">
+</div>
+<div style="margin-bottom:10px">
+<label class="form-label">OLT MAC</label>
+<input class="form-control" type="text" style="font-size:11px">
+</div>
+<div style="margin-bottom:10px">
+<label class="form-label">Compound Name</label>
+<input class="form-control" type="text" style="font-size:11px">
+</div>
+<div>
+<label class="form-label">Slot Number</label>
+<input class="form-control" type="text" style="font-size:11px">
+</div>
+</div>
+</div>
+</div>
+
+<!-- SWITCH SECTION -->
+<div class="card" style="margin-bottom:14px">
+<div class="card-header" style="padding:10px;background:var(--gh-overlay)">
+<div style="font-size:11px;font-weight:700;text-transform:uppercase">Switch Configuration</div>
+</div>
+<div class="card-body" style="padding:12px">
+<div style="margin-bottom:10px">
+<label class="form-label">Switch Model</label>
+<input class="form-control" type="text" style="font-size:11px" placeholder="MAGG&IAGO">
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+<select class="form-control" style="font-size:11px"><option>Type</option></select>
+<select class="form-control" style="font-size:11px"><option>Module</option></select>
+<select class="form-control" style="font-size:11px"><option>Port</option></select>
+</div>
+<div style="margin-top:10px">
+<label class="form-label">Interface Switch</label>
+<select class="form-control" style="font-size:11px"><option>Select</option></select>
+</div>
+</div>
+</div>
+
+<!-- REMARKS SECTION -->
+<div class="card" style="margin-bottom:14px">
+<div class="card-header" style="padding:10px">
+<div style="font-size:11px;font-weight:700;text-transform:uppercase">Remarks & Notes</div>
+</div>
+<div class="card-body" style="padding:12px">
+<textarea class="form-control" style="font-size:11px;min-height:80px" placeholder="Enter any additional remarks or notes..."></textarea>
+</div>
+</div>
+
+<!-- BOTTOM STATUS SECTION -->
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:14px">
+<div class="card">
+<div class="card-body" style="padding:10px">
+<div style="font-size:10px;color:var(--gh-muted);text-transform:uppercase;margin-bottom:4px">Actioning Date</div>
+<input class="form-control" type="text" style="font-size:11px" placeholder="Date">
+</div>
+</div>
+<div class="card">
+<div class="card-body" style="padding:10px">
+<div style="font-size:10px;color:var(--gh-muted);text-transform:uppercase;margin-bottom:4px">OM Status</div>
+<div style="font-weight:600;color:var(--gh-text);padding:6px">BOOKED</div>
+</div>
+</div>
+<div class="card">
+<div class="card-body" style="padding:10px">
+<div style="font-size:10px;color:var(--gh-muted);text-transform:uppercase;margin-bottom:4px">San Received Date</div>
+<input class="form-control" type="text" style="font-size:11px" placeholder="Date">
+</div>
+</div>
+<div class="card">
+<div class="card-body" style="padding:10px">
+<div style="font-size:10px;color:var(--gh-muted);text-transform:uppercase;margin-bottom:4px">CRM Status</div>
+<div style="font-weight:600;color:var(--red);padding:6px">Closed</div>
+</div>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div class="card">
+<div class="card-body" style="padding:10px">
+<div style="font-size:10px;color:var(--gh-muted);text-transform:uppercase;margin-bottom:4px">Processing Date</div>
+<input class="form-control" type="text" style="font-size:11px" placeholder="Date">
+</div>
+</div>
+<div class="card">
+<div class="card-body" style="padding:10px">
+<div style="font-size:10px;color:var(--gh-muted);text-transform:uppercase;margin-bottom:4px">San Accepted Date</div>
+<input class="form-control" type="text" style="font-size:11px" placeholder="Date">
+</div>
+</div>
+</div>
+
+<!-- ACTION BUTTONS -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+<button class="btn btn-secondary" style="padding:8px 14px"><i class="fas fa-times"></i> Close CRM</button>
+<button class="btn btn-secondary" style="padding:8px 14px"><i class="fas fa-sign-out"></i> Exit</button>
+</div>
+
+<div class="b2b-footer">
+<div class="b2b-footer-title"><i class="fas fa-server"></i> Service Order Status — Live</div>
+<div class="b2b-grid">
+<div class="b2b-node blue"><div class="b2b-node-label">Order Status</div><div class="b2b-node-val blue">TERMINATED</div></div>
+<div class="b2b-node green"><div class="b2b-node-label">Equipment Status</div><div class="b2b-node-val green">CONFIGURED</div></div>
+<div class="b2b-node yellow"><div class="b2b-node-label">CRM Status</div><div class="b2b-node-val yellow">CLOSED</div></div>
+<div class="b2b-node blue"><div class="b2b-node-label">OM Status</div><div class="b2b-node-val blue">BOOKED</div></div>
+<div class="b2b-node green"><div class="b2b-node-label">Network Health</div><div class="b2b-node-val green">✓ STABLE</div></div>
+<div class="b2b-node purple"><div class="b2b-node-label">Validation</div><div class="b2b-node-val purple">COMPLETE</div></div>
+<div class="b2b-node green"><div class="b2b-node-label">Audit Status</div><div class="b2b-node-val green">✓ PASS</div></div>
+<div class="b2b-node blue"><div class="b2b-node-label">Last Updated</div><div class="b2b-node-val blue">2m ago</div></div>
+</div>
+</div>
+</div><!-- /services -->
+<div class="page-header">
 <div class="page-title"><i class="fas fa-layer-group"></i> Customer Service Inquiry</div>
 <div class="page-actions">
 <button class="btn btn-secondary"><i class="fas fa-refresh"></i> Refresh</button>
@@ -1755,367 +2043,4 @@ tr.innerHTML =
 document.getElementById('ticketBody').prepend(tr);
 document.getElementById('rowCount').textContent = document.querySelectorAll('#ticketBody tr').length;
 
-const sideCount = document.getElementById('sidebarIncidentCount');
-if(sideCount) sideCount.textContent = (parseInt(sideCount.textContent)||0) + 1;
-const kpi = document.getElementById('kpiOpenIncidents');
-if(kpi) kpi.textContent = (parseInt(kpi.textContent)||0) + 1;
-}
-
-// ── SAVE INCIDENT ──
-function saveIncident(){
-const btn=event.target;
-btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…';
-btn.disabled=true;
-setTimeout(()=>{
-btn.innerHTML='<i class="fas fa-circle-check"></i> Saved!';
-btn.style.background='var(--teal)';
-
-const routeSelect = document.getElementById('incidentRouteGroup');
-const routeText = routeSelect.options[routeSelect.selectedIndex].text;
-const wasNew = isNewTicket;
-if(wasNew) addIncidentRow();
-showToast((wasNew ? 'Ticket created and ' : 'Changes saved · ')+'routed to <strong>'+routeText+'</strong>', 'fa-paper-plane');
-
-setTimeout(()=>{
-btn.innerHTML='<i class="fas fa-floppy-disk"></i> Confirm & Save';
-btn.style.background='';
-btn.disabled=false;
-if(wasNew){
-isNewTicket=false;
-showPage('console', document.querySelector('.gh-nav-item[onclick*="console"]'));
-}
-},1400);
-},900);
-}
-
-// ── OPEN NEW WORK ORDER (blank ticket) ──
-function openNewWorkOrder(){
-const idNum = 'WO' + String(woCounter++).padStart(8,'0');
-document.getElementById('woTitleInput').value = '';
-document.getElementById('woIdInput').value = idNum;
-document.getElementById('woIdBadge').textContent = idNum;
-document.getElementById('woNotesInput').value = '';
-document.getElementById('woTransferTarget').value = 'B2B Support';
-document.getElementById('woTransferLog').innerHTML = '';
-showPage('workorder', null);
-}
-
-// ── TRANSFER WORK ORDER TO B2B SUPPORT / GROUP ──
-function transferWorkOrder(){
-const btn = event.target.closest('button');
-const targetSelect = document.getElementById('woTransferTarget');
-const targetVal = targetSelect.value;
-const targetText = targetSelect.options[targetSelect.selectedIndex].text;
-const id = document.getElementById('woIdInput').value;
-const title = document.getElementById('woTitleInput').value.trim() || 'Untitled work order';
-
-btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Transferring…';
-btn.disabled = true;
-
-setTimeout(()=>{
-btn.innerHTML = '<i class="fas fa-circle-check"></i> Transferred!';
-btn.style.background = 'var(--purple)';
-btn.style.borderColor = 'var(--purple)';
-
-const log = document.getElementById('woTransferLog');
-const item = document.createElement('div');
-item.className = 'activity-item';
-item.innerHTML = '<div class="activity-dot blue"></div><div><div class="activity-text"><strong>'+id+'</strong> transferred to <strong>'+targetText+'</strong></div><div class="activity-time">Just now · '+title+'</div></div>';
-log.prepend(item);
-
-const isBot = targetVal === 'B2B Support';
-showToast('Work order <strong>'+id+'</strong> sent to <strong>'+targetText+'</strong>', isBot ? 'fa-robot' : 'fa-paper-plane', isBot ? 'bot' : '');
-
-setTimeout(()=>{
-btn.innerHTML = '<i class="fas fa-robot"></i> Transfer Ticket';
-btn.style.background = '';
-btn.style.borderColor = '';
-btn.disabled = false;
-},2000);
-},900);
-}
-
-// ── SEARCH CUSTOMER SERVICE ──
-function searchCustomerService(){
-const v=document.getElementById('serviceSearchInput').value.toLowerCase();
-// Just enable the search button
-}
-
-// ── LOAD SERVICE DETAILS ──
-function loadServiceDetails(){
-const input = document.getElementById('serviceSearchInput').value.trim();
-if(!input) {
-showToast('Please enter customer name or account ID', 'fa-exclamation-circle');
-return;
-}
-
-const btn = event.target;
-btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading…';
-btn.disabled = true;
-
-setTimeout(()=>{
-// Simulate loading customer data
-const customerData = {
-'salam': {
-accountNameEn: 'SALAM MOBILE',
-accountNameAr: 'سلام موبايل',
-serviceId: '966510528178',
-status: 'ACTIVE',
-billingStatus: 'PAID',
-serviceLevel: 'Enterprise Gold',
-contractRenewal: '90 Days'
-},
-'966510528178': {
-accountNameEn: 'SALAM MOBILE',
-accountNameAr: 'سلام موبايل',
-serviceId: '966510528178',
-status: 'ACTIVE',
-billingStatus: 'PAID',
-serviceLevel: 'Enterprise Gold',
-contractRenewal: '90 Days'
-},
-'0540': {
-accountNameEn: 'SALAM MOBILE',
-accountNameAr: 'سلام موبايل',
-serviceId: '966510528178',
-status: 'ACTIVE',
-billingStatus: 'PAID',
-serviceLevel: 'Enterprise Gold',
-contractRenewal: '90 Days'
-}
-};
-
-let found = false;
-for(let key in customerData) {
-if(input.toLowerCase().includes(key)) {
-const data = customerData[key];
-document.getElementById('accountNameEn').textContent = data.accountNameEn;
-document.getElementById('accountNameAr').textContent = data.accountNameAr;
-document.getElementById('serviceId').textContent = data.serviceId;
-document.getElementById('accountStatus').textContent = '✓ '+data.status;
-document.getElementById('billingStatus').textContent = '✓ '+data.billingStatus;
-document.getElementById('serviceLevel').textContent = data.serviceLevel;
-document.getElementById('contractRenewal').textContent = data.contractRenewal;
-document.getElementById('subscriptionStatus').style.color = 'var(--teal)';
-document.getElementById('subscriptionStatus').textContent = 'ACTIVE';
-found = true;
-break;
-}
-}
-
-if(found) {
-showToast('Customer service details loaded successfully ✓', 'fa-check-circle');
-} else {
-showToast('Customer not found. Try another search term.', 'fa-exclamation-circle');
-}
-
-btn.innerHTML = '<i class="fas fa-search"></i> Fetch Service Details';
-btn.disabled = false;
-},1200);
-}
-
-
-const C={
-responsive:true,
-maintainAspectRatio:false,
-plugins:{legend:{display:false}},
-scales:{
-x:{ticks:{color:'#6e7681',font:{size:11}},grid:{color:'#21262d'},border:{color:'#30363d'}},
-y:{ticks:{color:'#6e7681',font:{size:11}},grid:{color:'#21262d'},border:{color:'#30363d'}}
-}
-};
-
-// INCIDENT BACKLOG
-new Chart(document.getElementById('incidentBacklog'),{type:'line',
-data:{
-labels:['Dec 24','Jan 15','Feb 2','Mar 1','Apr 1','May 1','Jun 21'],
-datasets:[
-{label:'All',data:[2160,1850,1200,950,700,450,190],
-borderColor:'#388bfd',backgroundColor:'rgba(56,139,253,.08)',
-fill:true,tension:.4,pointRadius:3,pointBackgroundColor:'#388bfd'},
-{label:'Critical',data:[310,280,210,160,90,60,22],
-borderColor:'#da3633',backgroundColor:'rgba(218,54,51,.05)',
-fill:true,tension:.4,pointRadius:3,pointBackgroundColor:'#da3633'}
-]
-},
-options:{...C,plugins:{legend:{display:true,labels:{color:'#8b949e',font:{size:11},
-boxWidth:10,padding:12}}}}
-});
-
-// OPEN INCIDENTS (stacked bar)
-new Chart(document.getElementById('incidentOpen'),{type:'bar',
-data:{
-labels:['Assigned','In Progress','Pending'],
-datasets:[
-{label:'Critical',data:[12,5,3],backgroundColor:'#da3633'},
-{label:'High',data:[45,22,15],backgroundColor:'#f0883e'},
-{label:'Medium',data:[180,90,60],backgroundColor:'#d29922'},
-{label:'Low',data:[288,120,80],backgroundColor:'#3fb950'}
-]
-},
-options:{...C,scales:{...C.scales,x:{...C.scales.x,stacked:true},y:{...C.scales.y,stacked:true}},
-plugins:{legend:{display:true,labels:{color:'#8b949e',font:{size:11},boxWidth:10,padding:12}}}}
-});
-
-// WORK ORDER BACKLOG
-new Chart(document.getElementById('woBacklog'),{type:'line',
-data:{
-labels:['May 23','May 26','Jun 3','Jun 9','Jun 15','Jun 21'],
-datasets:[{label:'All',data:[8537,7200,6000,5500,6200,5800],
-borderColor:'#388bfd',backgroundColor:'rgba(56,139,253,.08)',
-fill:true,tension:.3,pointRadius:3,pointBackgroundColor:'#388bfd'}]
-},
-options:C
-});
-
-// OPEN WORK ORDERS (stacked)
-new Chart(document.getElementById('woOpen'),{type:'bar',
-data:{
-labels:['Assigned','Pending','Waiting Approval','Planning','In Progress'],
-datasets:[
-{label:'Critical',data:[5,2,1,1,3],backgroundColor:'#da3633'},
-{label:'High',data:[30,15,8,5,20],backgroundColor:'#f0883e'},
-{label:'Medium',data:[120,80,40,25,80],backgroundColor:'#d29922'},
-{label:'Low',data:[480,300,150,80,280],backgroundColor:'#3fb950'}
-]
-},
-options:{...C,scales:{...C.scales,x:{...C.scales.x,stacked:true},y:{...C.scales.y,stacked:true}},
-plugins:{legend:{display:true,labels:{color:'#8b949e',font:{size:11},boxWidth:10,padding:12}}}}
-});
-
-// SERVICE REQUEST BACKLOG
-new Chart(document.getElementById('srBacklog'),{type:'line',
-data:{
-labels:['Dec 24','Feb 2','Apr 1','Jun 21'],
-datasets:[{label:'Requests',data:[2,5,8,16],
-borderColor:'#8957e5',backgroundColor:'rgba(137,87,229,.08)',
-fill:true,tension:.4,pointRadius:4,pointBackgroundColor:'#8957e5'}]
-},
-options:C
-});
-
-// SERVICE REQUEST OPEN
-new Chart(document.getElementById('srOpen'),{type:'bar',
-data:{
-labels:['In Cart','Submitted','In Review','Pending','Waiting Approval','Initiated','In Progress'],
-datasets:[
-{label:'Critical',data:[0,1,0,0,0,0,1],backgroundColor:'#da3633'},
-{label:'High',data:[1,2,1,1,0,0,2],backgroundColor:'#f0883e'},
-{label:'Medium',data:[1,3,2,1,1,1,1],backgroundColor:'#d29922'},
-{label:'Low',data:[0,0,1,0,0,0,0],backgroundColor:'#3fb950'}
-]
-},
-options:{...C,scales:{...C.scales,x:{...C.scales.x,stacked:true},y:{...C.scales.y,stacked:true}},
-plugins:{legend:{display:true,labels:{color:'#8b949e',font:{size:11},boxWidth:10,padding:12}}}}
-});
-
-// REPORT TREND
-new Chart(document.getElementById('reportTrend'),{type:'line',
-data:{
-labels:['Jan','Feb','Mar','Apr','May','Jun'],
-datasets:[
-{label:'Opened',data:[410,390,500,320,280,190],
-borderColor:'#da3633',backgroundColor:'rgba(218,54,51,.06)',fill:true,tension:.4},
-{label:'Resolved',data:[380,400,460,310,290,185],
-borderColor:'#3fb950',backgroundColor:'rgba(63,185,80,.06)',fill:true,tension:.4}
-]
-},
-options:{...C,plugins:{legend:{display:true,labels:{color:'#8b949e',font:{size:11},
-boxWidth:10,padding:12}}}}
-});
-
-// REPORT PIE
-new Chart(document.getElementById('reportPie'),{type:'doughnut',
-data:{
-labels:['Critical','High','Medium','Low'],
-datasets:[{data:[12,45,180,288],
-backgroundColor:['#da3633','#f0883e','#d29922','#3fb950'],
-borderColor:'#161b22',borderWidth:2}]
-},
-options:{responsive:true,maintainAspectRatio:false,
-plugins:{legend:{display:true,position:'right',
-labels:{color:'#8b949e',font:{size:11},padding:14}}}}
-});
-
-// ASSIGNEE PERFORMANCE
-new Chart(document.getElementById('reportAssignee'),{type:'bar',
-data:{
-labels:['Aseel Al-Ahmadi','Fahad Al-Malki','Khalid Al-Anzi'],
-datasets:[
-{label:'Resolved',data:[48,62,35],backgroundColor:'#3fb950'},
-{label:'In Progress',data:[12,8,15],backgroundColor:'#388bfd'},
-{label:'Breached',data:[1,2,0],backgroundColor:'#da3633'}
-]
-},
-options:{...C,indexAxis:'y',
-plugins:{legend:{display:true,labels:{color:'#8b949e',font:{size:11},boxWidth:10,padding:12}}}}
-});
-// ── AMBIENT TECH BACKGROUND (subtle animated network) ──
-(function(){
-const canvas = document.getElementById('bgfx-canvas');
-if(!canvas) return;
-const ctx = canvas.getContext('2d');
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-let particles = [];
-let running = true;
-
-function resize(){
-const rect = canvas.parentElement.getBoundingClientRect();
-canvas.width = rect.width;
-canvas.height = rect.height;
-const count = Math.max(20, Math.min(55, Math.floor((rect.width*rect.height)/24000)));
-particles = Array.from({length:count}, ()=>({
-x: Math.random()*rect.width,
-y: Math.random()*rect.height,
-vx: (Math.random()-0.5)*0.22,
-vy: (Math.random()-0.5)*0.22,
-r: Math.random()*1.3+0.6
-}));
-}
-
-function step(){
-if(!running) return;
-const w = canvas.width, h = canvas.height;
-ctx.clearRect(0,0,w,h);
-for(const p of particles){
-p.x += p.vx; p.y += p.vy;
-if(p.x<0||p.x>w) p.vx*=-1;
-if(p.y<0||p.y>h) p.vy*=-1;
-}
-for(let i=0;i<particles.length;i++){
-for(let j=i+1;j<particles.length;j++){
-const a=particles[i], b=particles[j];
-const dx=a.x-b.x, dy=a.y-b.y;
-const d=Math.sqrt(dx*dx+dy*dy);
-if(d<110){
-ctx.strokeStyle = 'rgba(56,139,253,'+(0.14*(1-d/110)).toFixed(3)+')';
-ctx.lineWidth = 1;
-ctx.beginPath();
-ctx.moveTo(a.x,a.y);
-ctx.lineTo(b.x,b.y);
-ctx.stroke();
-}
-}
-}
-for(const p of particles){
-ctx.beginPath();
-ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-ctx.fillStyle = 'rgba(63,185,80,.4)';
-ctx.fill();
-}
-requestAnimationFrame(step);
-}
-
-if(!reduceMotion){
-resize();
-step();
-window.addEventListener('resize', resize);
-document.addEventListener('visibilitychange', ()=>{
-running = !document.hidden;
-if(running) step();
-});
-}
-})();
-</script>
-</body>
-  </html>
+const sideCount = document.getElementById('sidebarIncident 
